@@ -13,8 +13,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Home
 Route::get('/', function () {
     return view('home');
 });
 
+// Questions
 Route::get('/question/', 'QuestionController@index');
+
+Route::get('/question/create', 'QuestionController@create');
+Route::post('/question/', 'QuestionController@store');
+
+
+Route::get('/question/{question}', 'QuestionController@show');
+
+Route::delete('/question/{question}', 'QuestionController@destroy');
+
