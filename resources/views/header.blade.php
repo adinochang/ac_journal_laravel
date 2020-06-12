@@ -5,18 +5,15 @@
         <ul>
             <li><a href="/question/">Setup Questions</a></li>
             <li><a href="/reports/">Reports</a></li>
-            <li><a href="#" class="button special">Sign Up</a></li>
         </ul>
     </nav>
 </header>
 
 <!-- Banner -->
 <section id="banner">
-    <h2>Hi. How was your day?</h2>
-    <p></p>
+    @yield('page_title')
+
     <ul class="actions">
-        <li>
-            <a href="#" class="button big">Add Entry</a>
-        </li>
+        @yield('action')
     </ul>
 </section>

@@ -1036,7 +1036,7 @@
 		background-size: cover;
 		color: #ffffff;
         height: 100px;
-		padding: 14em 0em 14em;
+		padding: 3em 0em 12em;
 		text-align: center;
 	}
 
@@ -1218,3 +1218,8 @@
 		.grid-demo .row.flush > div:last-child span {
 			border-radius: 0 4px 4px 0;
 		}
+
+        /* Pages */
+        .content-wrapper {
+            margin: 2em 1em;
+        }

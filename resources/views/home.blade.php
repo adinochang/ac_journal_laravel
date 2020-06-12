@@ -1,5 +1,15 @@
 @extends('layout')
 
+@section('page_title')
+    <h2>Hi. How was your day?</h2>
+@endsection
+
+@section('action')
+    <li>
+        <a href="#" class="button big">Add Entry</a>
+    </li>
+@endsection
+
 @section('content')
     <!-- Two -->
     <section id="main" class="wrapper">
