@@ -1223,3 +1223,13 @@
         .content-wrapper {
             margin: 2em 1em;
         }
+
+        .error_message {
+            color: red;
+            margin: 2px 12px;
+        }
+
+        .delete-button {
+            background-color: darkred !important;
+            color: #ffffff !important;
+        }

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Question;
 use Illuminate\Http\Request;
 
+
+
 class QuestionController extends Controller
 {
     /**
@@ -39,6 +41,14 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'label' => ['required','max:200'],
+            'required' => 'required',
+            'enabled' => 'required',
+        ]);
+
+
+
         $new_question = new Question();
 
         $new_question->label = request('label');
@@ -59,39 +69,55 @@ class QuestionController extends Controller
      */
     public function show(Question $question)
     {
-        return view('questions.show', [
-            'question' => $question
-        ]);
+        return response($question);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Question  $question
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit(Question $question)
     {
-        //
+        return view('questions.edit', [
+            'question' => $question
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Question  $question
-     * @return \Illuminate\Http\Response
+     * @param  Integer  $question_id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function update(Request $request, Question $question)
+    public function update(Request $request, $question_id)
     {
-        //
+        $request->validate([
+            'label' => ['required','max:200'],
+            'required' => 'required',
+            'enabled' => 'required',
+        ]);
+
+
+
+        $question = Question::find($question_id);
+
+        $question->label = request('label');
+        $question->required = request('required');
+        $question->enabled = request('enabled');
+
+        $question->save();
+
+        return redirect('/question');
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Question  $question
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function destroy(Question $question)
     {
@@ -99,6 +125,8 @@ class QuestionController extends Controller
             $question->delete();
 
             $this->index();
+
+            return redirect('/question');
         }
         catch (\Exception $exception)
         {

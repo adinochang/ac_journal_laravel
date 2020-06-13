@@ -18,14 +18,20 @@ Route::get('/', function () {
     return view('home');
 });
 
+
+
 // Questions
 Route::get('/question/', 'QuestionController@index');
 
-Route::get('/question/create', 'QuestionController@create');
+Route::get('/question/create/', 'QuestionController@create');
 Route::post('/question/', 'QuestionController@store');
-
 
 Route::get('/question/{question}', 'QuestionController@show');
 
+Route::get('/question/edit/{question}', 'QuestionController@edit');
+Route::put('/question/{question}', 'QuestionController@update');
+
 Route::delete('/question/{question}', 'QuestionController@destroy');
+
+
 
