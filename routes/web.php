@@ -14,9 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Home
-Route::get('/', function () {
-    return view('home');
-});
+Route::get('/', 'EntryController@blog');
 
 
 

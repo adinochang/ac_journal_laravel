@@ -26,6 +26,22 @@ class EntryController extends Controller
 
 
     /**
+     * Finds entries for the home view in blog entry format
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function blog()
+    {
+        $entries = Entry::orderBy('id', 'desc')->get();;
+
+        return view('home', [
+            'entries' => $entries
+        ]);
+    }
+
+
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
