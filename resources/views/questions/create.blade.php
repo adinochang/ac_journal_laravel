@@ -11,7 +11,7 @@
 
             <div class="row uniform 50%">
                 <div class="12u 12u$(4)">
-                    <input type="text" name="label" id="label" value="" placeholder="What question do you want to ask?"  />
+                    <input type="text" name="label" id="label" value="" placeholder="What question do you want to ask?" class="@error('label') error-input @enderror" />
 
                     @error('label')
                         <p class="error_message">{{ $errors->first('label') }}</p>

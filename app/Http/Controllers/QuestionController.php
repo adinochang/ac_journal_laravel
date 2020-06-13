@@ -23,6 +23,8 @@ class QuestionController extends Controller
         ]);
     }
 
+
+
     /**
      * Show the form for creating a new resource.
      *
@@ -33,6 +35,8 @@ class QuestionController extends Controller
         return view('questions.create');
     }
 
+
+
     /**
      * Store a newly created resource in storage.
      *
@@ -41,6 +45,7 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
+        // validation
         $request->validate([
             'label' => ['required','max:200'],
             'required' => 'required',
@@ -49,6 +54,7 @@ class QuestionController extends Controller
 
 
 
+        // save new question
         $new_question = new Question();
 
         $new_question->label = request('label');
@@ -61,6 +67,7 @@ class QuestionController extends Controller
     }
 
 
+
     /**
      * Display the specified resource.
      *
@@ -71,6 +78,8 @@ class QuestionController extends Controller
     {
         return response($question);
     }
+
+
 
     /**
      * Show the form for editing the specified resource.
@@ -85,15 +94,18 @@ class QuestionController extends Controller
         ]);
     }
 
+
+
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  Integer  $question_id
+     * @param  Question  $question
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function update(Request $request, $question_id)
+    public function update(Request $request, Question $question)
     {
+        // validation
         $request->validate([
             'label' => ['required','max:200'],
             'required' => 'required',
@@ -102,8 +114,7 @@ class QuestionController extends Controller
 
 
 
-        $question = Question::find($question_id);
-
+        // update question
         $question->label = request('label');
         $question->required = request('required');
         $question->enabled = request('enabled');
@@ -112,6 +123,8 @@ class QuestionController extends Controller
 
         return redirect('/question');
     }
+
+
 
     /**
      * Remove the specified resource from storage.
