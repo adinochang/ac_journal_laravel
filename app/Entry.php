@@ -163,4 +163,16 @@ class Entry extends Model
         // delete entry
         parent::delete();
     }
+
+
+
+    /**
+     * Get the table associated with the model.
+     *
+     * @return string
+     */
+    public function getTable()
+    {
+        return 'ac_journal_entries';
+    }
 }

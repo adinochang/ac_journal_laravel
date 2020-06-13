@@ -13,7 +13,7 @@ class CreateQuestionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('questions', function (Blueprint $table) {
+        Schema::create('ac_journal_questions', function (Blueprint $table) {
             $table->id();
             $table->string('label', 200);
             $table->boolean('required')->default(true);
@@ -29,6 +29,6 @@ class CreateQuestionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('questions');
+        Schema::dropIfExists('ac_journal_questions');
     }
 }

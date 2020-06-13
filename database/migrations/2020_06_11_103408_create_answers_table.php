@@ -13,15 +13,15 @@ class CreateAnswersTable extends Migration
      */
     public function up()
     {
-        Schema::create('answers', function (Blueprint $table) {
+        Schema::create('ac_journal_answers', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('entry_id');
             $table->unsignedBigInteger('question_id');
             $table->mediumText('answer_text');
             $table->timestamps();
 
-            $table->foreign('entry_id')->references('id')->on('entries');
-            $table->foreign('question_id')->references('id')->on('questions');
+            $table->foreign('entry_id')->references('id')->on('ac_journal_entries');
+            $table->foreign('question_id')->references('id')->on('ac_journal_questions');
         });
     }
 
@@ -32,6 +32,6 @@ class CreateAnswersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('answers');
+        Schema::dropIfExists('ac_journal_answers');
     }
 }

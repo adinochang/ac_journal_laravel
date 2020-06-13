@@ -39,4 +39,16 @@ class Question extends Model
     {
         return $this->where('enabled', 1)->where('required', 1)->OrderBy('id')->get();
     }
+
+
+
+    /**
+     * Get the table associated with the model.
+     *
+     * @return string
+     */
+    public function getTable()
+    {
+        return 'ac_journal_questions';
+    }
 }

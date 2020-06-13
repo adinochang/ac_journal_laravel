@@ -77,4 +77,16 @@ class Answer extends Model
 
         return $answer;
     }
+
+
+
+    /**
+     * Get the table associated with the model.
+     *
+     * @return string
+     */
+    public function getTable()
+    {
+        return 'ac_journal_answers';
+    }
 }
