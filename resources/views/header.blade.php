@@ -4,6 +4,7 @@
     <nav id="nav">
         <ul>
             <li><a href="/question/">Setup Questions</a></li>
+            <li><a href="/entry/">Edit Entries</a></li>
             <li><a href="/reports/">Reports</a></li>
         </ul>
     </nav>

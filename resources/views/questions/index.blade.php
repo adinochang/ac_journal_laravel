@@ -1,8 +1,12 @@
 @extends('layout')
 
+
+
 @section('page_title')
     <h2>Setup Questions</h2>
 @endsection
+
+
 
 @section('content')
     <div class="content-wrapper">

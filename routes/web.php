@@ -35,3 +35,15 @@ Route::delete('/question/{question}', 'QuestionController@destroy');
 
 
 
+// Entries
+Route::get('/entry/', 'EntryController@index');
+
+Route::get('/entry/create/', 'EntryController@create');
+Route::post('/entry/', 'EntryController@store');
+
+Route::get('/entry/{entry}', 'EntryController@show');
+
+Route::get('/entry/edit/{entry}', 'EntryController@edit');
+Route::put('/entry/{entry}', 'EntryController@update');
+
+Route::delete('/entry/{entry}', 'EntryController@destroy');
