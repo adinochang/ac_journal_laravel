@@ -1233,3 +1233,10 @@
             background-color: darkred !important;
             color: #ffffff !important;
         }
+
+        .error-input,
+        .error-textarea {
+            box-shadow: 0 0 10px darkred;
+            outline: none !important;
+        }
+
