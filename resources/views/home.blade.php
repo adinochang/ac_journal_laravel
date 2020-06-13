@@ -6,7 +6,7 @@
 
 @section('action')
     <li>
-        <a href="#" class="button big">Add Entry</a>
+        <a href="/entry/create/" class="button big">New Entry</a>
     </li>
 @endsection
 

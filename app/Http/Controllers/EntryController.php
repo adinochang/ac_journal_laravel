@@ -35,6 +35,8 @@ class EntryController extends Controller
         // retrieve the list of questions
         $question_model = new Question();
 
+
+
         return view('entries.create', [
             'questions' => $question_model->enabled_questions()
         ]);
@@ -67,7 +69,9 @@ class EntryController extends Controller
         }
 
 
-        return redirect('/entry');
+        // redirect to previous URL
+        $previous_url = request('previous_url');
+        return redirect(isset($previous_url) ? $previous_url : '/entry');
     }
 
 

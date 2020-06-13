@@ -24,10 +24,12 @@
                 <div class="12u$">
                     <ul class="actions">
                         <li><input type="submit" value="Save" class="special" /></li>
-                        <li><input type="reset" value="Cancel" onclick="window.location = '/entry';" /></li>
+                        <li><input type="reset" value="Cancel" onclick="window.location = '{{ url()->previous() }}';" /></li>
                     </ul>
                 </div>
             </div>
+
+            <input type="hidden" name="previous_url" value="{{ url()->previous() }}" />
         </form>
     </div>
 @endsection
