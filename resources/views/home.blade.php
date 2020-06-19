@@ -27,4 +27,8 @@
         </div>
     </section>
     @endforeach
+
+    <section id="pagination-section" class="wrapper" style="padding-left: 11em;">
+        {{ $entries->links() }}
+    </section>
 @endsection

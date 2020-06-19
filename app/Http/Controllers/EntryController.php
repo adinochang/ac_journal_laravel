@@ -16,7 +16,7 @@ class EntryController extends Controller
      */
     public function index()
     {
-        $entries = Entry::all();
+        $entries = Entry::paginate(5);
 
         return view('entries.index', [
             'entries' => $entries
@@ -32,7 +32,7 @@ class EntryController extends Controller
      */
     public function blog()
     {
-        $entries = Entry::orderBy('id', 'desc')->get();;
+        $entries = Entry::orderByDesc('id')->paginate(2);
 
         return view('home', [
             'entries' => $entries

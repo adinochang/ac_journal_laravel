@@ -39,6 +39,8 @@
                 </tr>
                 </tfoot>
             </table>
+
+            {{ $questions->links() }}
         </div>
     </div>
 @endsection

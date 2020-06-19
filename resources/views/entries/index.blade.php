@@ -35,6 +35,8 @@
                 </tr>
                 </tfoot>
             </table>
+
+            {{ $entries->links() }}
         </div>
     </div>
 @endsection

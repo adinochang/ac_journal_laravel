@@ -1219,6 +1219,34 @@
 			border-radius: 0 4px 4px 0;
 		}
 
+        /* Pagination */
+        .pagination .page-item {
+            float: left;
+            list-style: none;
+            text-align: center;
+        }
+
+        .pagination .page-item a {
+            color: #383b43;
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+        }
+
+        .pagination .page-item span {
+            color: #ffffff;
+            float: left;
+            padding: 8px 16px 8px 8px;
+        }
+
+        .pagination .active {
+            background-color: #383b43;
+        }
+
+        .pagination li a:hover:not(.active) {
+            background-color: #ddd;
+        }
+
         /* Pages */
         .content-wrapper {
             margin: 2em 1em;
