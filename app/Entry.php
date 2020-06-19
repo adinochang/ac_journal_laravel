@@ -48,11 +48,10 @@ class Entry extends Model
 
 
     /**
-     * Returns the answers in this journal entry
-     *
-     * @param  \Illuminate\Http\Request  $request
+     * Performs validation and returns the array of answers if validation is successful
+     * @return array
      */
-    public function perform_request_validation(&$request)
+    public function perform_request_validation()
     {
         $question_model = new Question();
         $required_questions = $question_model->required_questions();
@@ -64,7 +63,7 @@ class Entry extends Model
             $validation_array['answer_' . $required_question->id] = 'required';
         }
 
-        $request->validate($validation_array);
+        return request()->validate($validation_array);
     }
 
 
@@ -72,11 +71,10 @@ class Entry extends Model
     /**
      * Creates a new journal entry and saves the answers
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  array  $answers_array
      * @return boolean
      */
-    public function save_answers(&$request, $answers_array)
+    public function save_answers($answers_array)
     {
         if (!isset($answers_array) || sizeof($answers_array) == 0)
         {
@@ -88,18 +86,18 @@ class Entry extends Model
         // create an entry record
         $this->save();
 
+
+
         // save answers for the entry
         foreach($answers_array as $question_id => $answer_text)
         {
             if (strlen($answer_text) > 0)
             {
-                $new_answer = new Answer();
-
-                $new_answer->entry_id = $this->id;
-                $new_answer->question_id = $question_id;
-                $new_answer->answer_text = $answer_text;
-
-                $new_answer->save();
+                Answer::create([
+                    'entry_id' => $this->id,
+                    'question_id' => $question_id,
+                    'answer_text' => $answer_text,
+                ]);
             }
         }
 
@@ -111,18 +109,15 @@ class Entry extends Model
     /**
      * Updates the timestamp of the entry and updates the answers
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  array  $answers_array
      * @return boolean
      */
-    public function update_answers(&$request, $answers_array)
+    public function update_answers($answers_array)
     {
         if (!isset($answers_array) || sizeof($answers_array) == 0)
         {
             return false;
         }
-
-
 
         // update entry record
         $this->setUpdatedAt(now());

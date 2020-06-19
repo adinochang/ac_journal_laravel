@@ -6,6 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Answer extends Model
 {
+    protected $fillable = [
+        'entry_id',
+        'question_id',
+        'answer_text',
+    ];
+
+
+
     /**
      * Returns the entry that contains this answer
      *
@@ -36,14 +44,13 @@ class Answer extends Model
      *
      * This array can then be fed into the Entry model's save function
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function get_answers_array_from_request(&$request)
+    public function get_answers_array_from_request()
     {
         $answers_array = [];
 
-        foreach ($request->all() as $name => $value)
+        foreach (request()->all() as $name => $value)
         {
             if (strpos($name, 'answer_') !== false)
             {

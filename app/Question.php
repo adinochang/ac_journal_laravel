@@ -6,6 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Question extends Model
 {
+    protected $fillable = [
+        'label',
+        'required',
+        'enabled',
+    ];
+
+
+
     /**
      * Returns a list of answers to this question
      *

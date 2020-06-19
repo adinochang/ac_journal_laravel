@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Entry;
 use App\Question;
 use App\Answer;
-use Illuminate\Http\Request;
+
+
 
 class EntryController extends Controller
 {
@@ -63,31 +64,26 @@ class EntryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function store(Request $request)
+    public function store()
     {
         // validation
         $entry_model = new Entry();
-        $entry_model->perform_request_validation($request);
-
-
-        // get an array of answers from $request
-        $answer_model = new Answer();
-        $answers_array = $answer_model->get_answers_array_from_request($request);
-
+        $entry_model->perform_request_validation();
 
         // save new entry with answers
-        if (!$entry_model->save_answers($request, $answers_array))
+        $answer_model = new Answer();
+        $answers_array = $answer_model->get_answers_array_from_request();
+
+        if (!$entry_model->save_answers($answers_array))
         {
             abort('500');
         }
 
-
         // redirect to previous URL
         $previous_url = request('previous_url');
-        return redirect(isset($previous_url) ? $previous_url : '/entry');
+        return redirect(isset($previous_url) ? $previous_url : route('entry.index'));
     }
 
 
@@ -124,29 +120,26 @@ class EntryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  Entry  $entry
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function update(Request $request, Entry $entry)
+    public function update(Entry $entry)
     {
         // validation
-        $entry->perform_request_validation($request);
-
+        $entry->perform_request_validation();
 
         // get an array of answers from $request
         $answer_model = new Answer();
-        $answers_array = $answer_model->get_answers_array_from_request($request);
-
+        $answers_array = $answer_model->get_answers_array_from_request();
 
         // update entry with answers
-        if (!$entry->update_answers($request, $answers_array))
+        if (!$entry->update_answers($answers_array))
         {
             abort('500');
         }
 
 
-        return redirect('/entry');
+        return redirect(route('entry.index'));
     }
 
 
@@ -164,7 +157,7 @@ class EntryController extends Controller
 
             $this->index();
 
-            return redirect('/entry');
+            return redirect(route('entry.index'));
         }
         catch (\Exception $exception)
         {

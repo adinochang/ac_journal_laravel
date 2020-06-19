@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Question;
-use Illuminate\Http\Request;
 
 
 
@@ -40,30 +39,20 @@ class QuestionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function store(Request $request)
+    public function store()
     {
         // validation
-        $request->validate([
+        $validated_input = request()->validate([
             'label' => ['required','max:200'],
             'required' => 'required',
             'enabled' => 'required',
         ]);
 
+        Question::create($validated_input);
 
-
-        // save new question
-        $new_question = new Question();
-
-        $new_question->label = request('label');
-        $new_question->required = request('required');
-        $new_question->enabled = request('enabled');
-
-        $new_question->save();
-
-        return redirect('/question');
+        return redirect(route('question.index'));
     }
 
 
@@ -99,29 +88,21 @@ class QuestionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  Question  $question
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function update(Request $request, Question $question)
+    public function update(Question $question)
     {
         // validation
-        $request->validate([
+        $validated_input = request()->validate([
             'label' => ['required','max:200'],
             'required' => 'required',
             'enabled' => 'required',
         ]);
 
+        $question->update($validated_input);
 
-
-        // update question
-        $question->label = request('label');
-        $question->required = request('required');
-        $question->enabled = request('enabled');
-
-        $question->save();
-
-        return redirect('/question');
+        return redirect(route('question.index'));
     }
 
 
@@ -139,7 +120,7 @@ class QuestionController extends Controller
 
             $this->index();
 
-            return redirect('/question');
+            return redirect(route('question.index'));
         }
         catch (\Exception $exception)
         {
