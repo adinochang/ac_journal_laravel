@@ -13,7 +13,7 @@
                 @foreach ($questions as $question)
                     <div class="12u 12u$(4)">
                         <label for="answer_{{ $question->id }}">{{ $question->label }}</label>
-                        <textarea name="answer_{{ $question->id }}" id="answer_{{ $question->id }}" placeholder="Enter your answer" rows="6" class="@error('answer_' . $question->id) error-textarea @enderror" ></textarea>
+                        <textarea name="answer_{{ $question->id }}" id="answer_{{ $question->id }}" placeholder="Enter your answer" rows="6" class="@error('answer_' . $question->id) error-textarea @enderror" >{{ old('answer_' . $question->id) }}</textarea>
 
                         @error('answer_' . $question->id)
                         <p class="error_message">You must enter an answer for this question</p>

@@ -12,7 +12,7 @@
 
             <div class="row uniform 50%">
                 <div class="12u 12u$(4)">
-                    <input type="text" name="label" id="label" value="{{ $question->label }}" placeholder="What question do you want to ask?" class="@error('label') error-input @enderror" />
+                    <input type="text" name="label" id="label" value="{{ old('label') ?: $question->label }}" placeholder="What question do you want to ask?" class="@error('label') error-input @enderror" />
 
                     @error('label')
                     <p class="error_message">{{ $errors->first('label') }}</p>
@@ -22,8 +22,8 @@
                 <div class="6u 12u$(2)">
                     <div class="select-wrapper">
                         <select name="required" id="required">
-                            <option value="0" {{ $question->required == 0 ? 'selected' : '' }} >Optional</option>
-                            <option value="1" {{ $question->required == 1 ? 'selected' : '' }} >Required</option>
+                            <option value="0" {{ old('label') ?: $question->required == 0 ? 'selected' : '' }} >Optional</option>
+                            <option value="1" {{ old('label') ?: $question->required == 1 ? 'selected' : '' }} >Required</option>
                         </select>
 
                         @error('required')
