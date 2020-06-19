@@ -3,8 +3,8 @@
     <h1><a href="/">AC Journal</a></h1>
     <nav id="nav">
         <ul>
-            <li><a href="/question/">Questions</a></li>
-            <li><a href="/entry/">Entries</a></li>
+            <li><a href="{{ route('question.index') }}">Questions</a></li>
+            <li><a href="{{ route('entry.index') }}">Entries</a></li>
             <li><a href="/reports/">Reports</a></li>
         </ul>
     </nav>

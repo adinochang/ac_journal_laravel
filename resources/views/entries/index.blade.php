@@ -11,7 +11,7 @@
 @section('content')
     <div class="content-wrapper">
         <p>
-            <a href="/entry/create/" class="button alt icon fa-plus small" style="margin-right: 1em;">New Entry</a>
+            <a href="{{ route('entry.create') }}" class="button alt icon fa-plus small" style="margin-right: 1em;">New Entry</a>
         </p>
 
         <div class="table-wrapper">
@@ -25,7 +25,7 @@
                 <tbody>
                 @foreach ($entries as $entry)
                     <tr>
-                        <td><a href="/entry/edit/{{ $entry->id }}" class="button alt icon fa-pencil small" style="margin-right: 1em;">Edit</a> {{ $entry->answer_excerpt(50) }}</td>
+                        <td><a href="{{ route('entry.edit', $entry) }}" class="button alt icon fa-pencil small" style="margin-right: 1em;">Edit</a> {{ $entry->answer_excerpt(50) }}</td>
                         <td>{{ date('Y-m-d H:i:s',strtotime($entry->updated_at)) }}</td>
                     </tr>
                 @endforeach

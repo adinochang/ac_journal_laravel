@@ -6,7 +6,7 @@
 
 @section('action')
     <li>
-        <a href="/entry/create/" class="button big">New Entry</a>
+        <a href="{{ route('entry.create') }}" class="button big">New Entry</a>
     </li>
 @endsection
 

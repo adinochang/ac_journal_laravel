@@ -6,7 +6,7 @@
 
 @section('content')
     <div class="content-wrapper">
-        <form method="post" action="/question/{{ $question->id }}">
+        <form method="post" action="{{ route('question.update', $question) }}">
             @csrf
             @method('PUT')
 
@@ -56,7 +56,7 @@
 
 
 
-        <form method="post" action="/question/{{ $question->id }}">
+        <form method="post" action="{{ route('question.destroy', $question) }}">
             @csrf
             @method('DELETE')
 

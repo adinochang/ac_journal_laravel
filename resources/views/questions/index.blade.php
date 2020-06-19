@@ -11,7 +11,7 @@
 @section('content')
     <div class="content-wrapper">
         <p>
-            <a href="/question/create/" class="button alt icon fa-plus small" style="margin-right: 1em;">New Question</a>
+            <a href="{{ route('question.create') }}" class="button alt icon fa-plus small" style="margin-right: 1em;">New Question</a>
         </p>
 
         <div class="table-wrapper">
@@ -27,7 +27,7 @@
                 <tbody>
                 @foreach ($questions as $question)
                     <tr>
-                        <td><a href="/question/edit/{{ $question->id }}" class="button alt icon fa-pencil small" style="margin-right: 1em;">Edit</a>{{ $question->label }}</td>
+                        <td><a href="{{ route('question.edit', $question) }}" class="button alt icon fa-pencil small" style="margin-right: 1em;">Edit</a>{{ $question->label }}</td>
                         <td>{{ $question->required ? 'Required' : 'Optional' }}</td>
                         <td>{{ $question->enabled ? 'Enabled' : 'Disabled' }}</td>
                         <td>{{ date('Y-m-d H:i:s',strtotime($question->updated_at)) }}</td>
