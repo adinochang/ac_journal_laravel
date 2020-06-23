@@ -1226,7 +1226,8 @@
             text-align: center;
         }
 
-        .pagination .page-item a {
+        .pagination .page-item a,
+        .pagination .disabled .page-link {
             color: #383b43;
             float: left;
             padding: 8px 16px;

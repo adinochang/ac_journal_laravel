@@ -15,7 +15,7 @@
     <section id="main_{{ $entry->id }}" class="wrapper">
         <div class="container">
             <header class="major">
-                <h2>{{ date('F d Y H:i',strtotime($entry->updated_at)) }}</h2>
+                <h2>{{ date('F d Y',strtotime($entry->updated_at)) }}</h2>
                 <p>Recorded by AC</p>
             </header>
 
