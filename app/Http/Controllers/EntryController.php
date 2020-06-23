@@ -201,6 +201,7 @@ class EntryController extends Controller
             ->orderBy('created_at', 'asc')
             ->get();
 
+        // for each entry count the number of words and update the average_words result array
         foreach($entries as $entry)
         {
             $word_count = 0;
@@ -219,8 +220,11 @@ class EntryController extends Controller
                 ];
             }
 
+            // add word count total
             $entries_words[$month_label]['word_count'] += $word_count;
             $entries_words[$month_label]['entry_count'] += 1;
+
+            // update the average
             $average_words[$month_label] = round($entries_words[$month_label]['word_count'] / $entries_words[$month_label]['entry_count'], 1);
         }
 
