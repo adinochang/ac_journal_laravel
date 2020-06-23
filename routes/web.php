@@ -45,3 +45,8 @@ Route::get('/entry/edit/{entry}', 'EntryController@edit')->name('entry.edit');
 Route::put('/entry/{entry}', 'EntryController@update')->name('entry.update');
 
 Route::delete('/entry/{entry}', 'EntryController@destroy')->name('entry.destroy');
+
+
+
+// Reports
+Route::get('/report', 'EntryController@report')->name('entry.report');

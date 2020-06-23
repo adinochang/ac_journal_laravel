@@ -5,7 +5,7 @@
         <ul>
             <li><a href="{{ route('question.index') }}">Questions</a></li>
             <li><a href="{{ route('entry.index') }}">Entries</a></li>
-            <li><a href="/reports/">Reports</a></li>
+            <li><a href="{{ route('entry.report') }}">Reports</a></li>
         </ul>
     </nav>
 </header>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Entry;
 use App\Question;
 use App\Answer;
+use Carbon\Carbon;
 
 
 
@@ -164,5 +165,71 @@ class EntryController extends Controller
             dd($exception);
             abort(404);
         }
+    }
+
+
+
+    /**
+     * Display the reports page.
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function report()
+    {
+        // get the number of journal entries per month from the past year
+        $monthly_count = \DB::table('ac_journal_entries')
+            ->select(\DB::raw('DATE_FORMAT(created_at, "%b %Y") AS `created_month`, DATE_FORMAT(created_at, "%Y%m") AS `sort_month`, COUNT(*) `entry_count`'))
+            ->where('created_at', '>=', Carbon::now()->subDays(366) )
+            ->groupBy('created_month', 'sort_month')
+            ->orderBy('sort_month')
+            ->get();
+
+        $monthly_entries = [];
+
+        foreach($monthly_count as $month)
+        {
+            $monthly_entries[$month->created_month] = $month->entry_count;
+        }
+
+
+
+        // get the journal entry answers from the past year
+        $entries_words = [];
+        $average_words = [];
+
+        $entries = Entry::where('created_at', '>=', Carbon::now()->subDays(366) )
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        foreach($entries as $entry)
+        {
+            $word_count = 0;
+            foreach($entry->answers as $answer)
+            {
+                $word_count += str_word_count($answer->answer_text, 0);
+            }
+
+            $month_label = $entry->created_at->format('M Y');
+
+            if (!isset($entries_words[$month_label]))
+            {
+                $entries_words[$month_label] = [
+                    'word_count' => 0,
+                    'entry_count' => 0,
+                ];
+            }
+
+            $entries_words[$month_label]['word_count'] += $word_count;
+            $entries_words[$month_label]['entry_count'] += 1;
+            $average_words[$month_label] = round($entries_words[$month_label]['word_count'] / $entries_words[$month_label]['entry_count'], 1);
+        }
+
+
+
+        // return report data to view
+        return view('entries.report', [
+            'monthly_entries' => $monthly_entries,
+            'average_words' => $average_words,
+        ]);
     }
 }

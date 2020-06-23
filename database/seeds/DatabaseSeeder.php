@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
 
 
         // Create 30 entries
-        $created_at = Carbon::now()->subDays(60);
+        $created_at = Carbon::now()->subDays(120);
 
         for($count = 1; $count <= 30; $count++)
         {
