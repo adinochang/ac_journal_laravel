@@ -18,6 +18,13 @@
             <a href="{{ route('question.create') }}" class="button alt icon fa-plus small" style="margin-right: 1em;">New Question</a>
         </p>
 
+        <form method="GET" action="{{ route('question.index') }}">
+            <div class="filter-div">
+                <input type="text" name="filter_label" id="filter_label" value="{{ request('filter_label') }}" placeholder="Search labels" class="filter-input" />
+            </div>
+            @csrf
+        </form>
+
         <div class="table-wrapper">
             <table class="alt">
                 <thead>
@@ -37,6 +44,13 @@
                         <td>{{ date('Y-m-d H:i:s',strtotime($question->updated_at)) }}</td>
                     </tr>
                 @endforeach
+
+                @if (sizeof($questions) == 0)
+                    <tr>
+                        <td colspan="4">No records found</td>
+                    </tr>
+                @endif
+
                 </tbody>
                 <tfoot>
                 <tr>

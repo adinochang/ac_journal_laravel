@@ -15,7 +15,16 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        $questions = Question::paginate(5);
+        if(isset(request()->filter_label))
+        {
+            $questions = Question::where('label', 'like' , '%' . request()->filter_label . '%')->paginate(5);
+        }
+        else
+        {
+            $questions = Question::paginate(5);
+        }
+
+
 
         return view('questions.index', [
             'questions' => $questions

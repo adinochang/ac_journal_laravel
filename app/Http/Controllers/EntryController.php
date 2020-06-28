@@ -18,7 +18,18 @@ class EntryController extends Controller
      */
     public function index()
     {
-        $entries = Entry::orderByDesc('id')->paginate(5);
+        if(isset(request()->filter_date))
+        {
+            $entries = Entry::whereBetween('updated_at', [request()->filter_date,  request()->filter_date . ' 23:59:59'])
+                ->orderByDesc('id')->paginate(5);
+        }
+        else
+        {
+            $entries = Entry::orderByDesc('id')->paginate(5);
+        }
+
+
+
 
         return view('entries.index', [
             'entries' => $entries

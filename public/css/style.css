@@ -1269,6 +1269,14 @@
             outline: none !important;
         }
 
+        .filter-div {
+            width: 50%;
+        }
+
+        .filter-date-input {
+            width: 200px !important;
+        }
+
         .success-message {
             background-color: lightgreen;
             margin-bottom: 1em;
