@@ -1269,3 +1269,9 @@
             outline: none !important;
         }
 
+        .success-message {
+            background-color: lightgreen;
+            margin-bottom: 1em;
+            width:100%;
+        }
+

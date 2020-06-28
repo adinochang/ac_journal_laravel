@@ -52,7 +52,7 @@ class QuestionController extends Controller
 
         Question::create($validated_input);
 
-        return redirect(route('question.index'));
+        return redirect(route('question.index'))->with('message','Save successful');
     }
 
 
@@ -102,7 +102,7 @@ class QuestionController extends Controller
 
         $question->update($validated_input);
 
-        return redirect(route('question.index'));
+        return redirect(route('question.index'))->with('message','Update successful');
     }
 
 
@@ -120,7 +120,7 @@ class QuestionController extends Controller
 
             $this->index();
 
-            return redirect(route('question.index'));
+            return redirect(route('question.index'))->with('message','Delete successful');
         }
         catch (\Exception $exception)
         {

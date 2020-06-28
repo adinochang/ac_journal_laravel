@@ -18,7 +18,7 @@ class EntryController extends Controller
      */
     public function index()
     {
-        $entries = Entry::paginate(5);
+        $entries = Entry::orderByDesc('id')->paginate(5);
 
         return view('entries.index', [
             'entries' => $entries
@@ -84,7 +84,8 @@ class EntryController extends Controller
 
         // redirect to previous URL
         $previous_url = request('previous_url');
-        return redirect(isset($previous_url) ? $previous_url : route('entry.index'));
+
+        return redirect(isset($previous_url) ? $previous_url : route('entry.index'))->with('message','Save successful');
     }
 
 
@@ -140,7 +141,7 @@ class EntryController extends Controller
         }
 
 
-        return redirect(route('entry.index'));
+        return redirect(route('entry.index'))->with('message','Update successful');
     }
 
 
@@ -158,7 +159,7 @@ class EntryController extends Controller
 
             $this->index();
 
-            return redirect(route('entry.index'));
+            return redirect(route('entry.index'))->with('message','Delete successful');
         }
         catch (\Exception $exception)
         {

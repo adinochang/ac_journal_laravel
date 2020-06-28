@@ -10,6 +10,10 @@
 
 @section('content')
     <div class="content-wrapper">
+        @if (session('message'))
+        <div class="success-message">{{ session('message') }}</div>
+        @endif
+
         <p>
             <a href="{{ route('question.create') }}" class="button alt icon fa-plus small" style="margin-right: 1em;">New Question</a>
         </p>
