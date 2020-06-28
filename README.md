@@ -1,11 +1,27 @@
 ## AC Journal Laravel
 
-This is a daily journal app written in Laravel 6.  
+A daily journalling app.  
 
 ## Features
 
-- Configure the questions you want to ask in day's journal entry
-- Enter a new journal entry or edit a previous entry
-- Display the journal entries in a blog article format
-- Display an activity chart 
+- **Configure Questions** - Customize the template for journal entries by setting up the questions to ask. 
+Questions can be marked as mandatory or optional.   
+- **Create Journal Entries** - Enter new journal entries or edit previous entries
+- **Read Entries** - View journal entries on the home page in a blog format
+- **View Reports** - See reports on the number of entries per month, or the average number of words per article 
+
+## Project Status
+
+This project is not actively maintained. 
+
+## Built With
+- Laravel 7
+
+## Authors
+
+[adinochang](https://github.com/adinochang/)
+
+## License
+
+This package is licensed under the [MIT license](https://github.com/adinochang/ac_journal_laravel/blob/master/LICENSE).
 
