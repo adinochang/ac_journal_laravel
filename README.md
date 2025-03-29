@@ -24,22 +24,30 @@ This project is not actively maintained.
 
 ## Setup
 
-1. Install required libraries.
+1. Install required libraries:
 ``` 
 composer install
 npm ci
+```
+2. Create an .env file with an app key:
+``` 
+cp dev.env .env
 php artisan key:generate  
 ```
-2. Configure the database connection in config/database.php
-3. Run migration to create tables
+3. Configure the database connection in config/database.php (use sqlite or mysql)
+4. If using sqlite, create a new database file:
+``` 
+touch database/database.sqlite
+```
+6. Run migration to create tables
 ``` 
 php artisan migrate
 ```
-4. (Dev environment only) Seed database with some test data
+5. (Dev environment only) Seed database with some test data
 ``` 
 php artisan db:seed
 ```
-5. Start the Laravel back-end API 
+6. Start the Laravel application
 ``` 
 php artisan serve
 ```
