@@ -17,6 +17,33 @@ This project is not actively maintained.
 ## Built With
 - Laravel 7
 
+## Requirements
+- PHP 7.x 
+- Composer 2.8 and above
+- Sqlite or MySql database ready
+
+## Setup
+
+1. Install required libraries.
+``` 
+composer install
+npm ci
+php artisan key:generate  
+```
+2. Configure the database connection in config/database.php
+3. Run migration to create tables
+``` 
+php artisan migrate
+```
+4. (Dev environment only) Seed database with some test data
+``` 
+php artisan db:seed
+```
+5. Start the Laravel back-end API 
+``` 
+php artisan serve
+```
+
 ## Authors
 
 [adinochang](https://github.com/adinochang/)
