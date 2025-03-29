@@ -27,7 +27,6 @@ This project is not actively maintained.
 1. Install required libraries:
 ``` 
 composer install
-npm ci
 ```
 2. Create an .env file with an app key:
 ``` 
