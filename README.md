@@ -38,15 +38,15 @@ php artisan key:generate
 ``` 
 touch database/database.sqlite
 ```
-6. Run migration to create tables
+5. Run migration to create tables
 ``` 
 php artisan migrate
 ```
-5. (Dev environment only) Seed database with some test data
+6. (Dev environment only) Seed database with some test data
 ``` 
 php artisan db:seed
 ```
-6. Start the Laravel application
+7. Start the Laravel application
 ``` 
 php artisan serve
 ```
