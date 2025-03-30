@@ -8,29 +8,11 @@ use Mockery\MockInterface;
 
 class QuestionTest extends AbstractModelTest
 {
-    private function setupMockBuilder($withRequired = false, array $returnData = []): MockInterface
+    private function setupMockBuilder(array $returnData = []): MockInterface
     {
         $mockBuilder = $this->createMockBuilderWithReturnData($returnData);
 
-        $queryConditions[] = [
-            'expects' => 'where',
-            'arguments' => ['enabled', 1],
-        ];
-
-        if ($withRequired) {
-            $queryConditions[] = [
-                'expects' => 'where',
-                'arguments' => ['required', 1],
-            ];
-        }
-
-        $queryConditions[] = [
-            'expects' => 'orderBy',
-            'arguments' => ['id'],
-        ];
-
-        $this->applyMockQueryConditions($mockBuilder, $queryConditions);
-
+        $this->ignoreQueryConditions($mockBuilder);
 
         return $mockBuilder;
     }
@@ -56,7 +38,7 @@ class QuestionTest extends AbstractModelTest
 
     public function testEnabledQuestionsReturnsExpectedData()
     {
-        $mockBuilder = $this->setupMockBuilder(false, self::TEST_DATA);
+        $mockBuilder = $this->setupMockBuilder(self::TEST_DATA);
 
         /** @var Question $model */
         $model = $this->setupMockModel($mockBuilder);
@@ -68,7 +50,7 @@ class QuestionTest extends AbstractModelTest
 
     public function testRequiredQuestionsReturnsEmptyCollection()
     {
-        $mockBuilder = $this->setupMockBuilder(true);
+        $mockBuilder = $this->setupMockBuilder();
 
         /** @var Question $model */
         $model = $this->setupMockModel($mockBuilder);
@@ -80,7 +62,7 @@ class QuestionTest extends AbstractModelTest
 
     public function testRequiredQuestionsReturnsExpectedData()
     {
-        $mockBuilder = $this->setupMockBuilder(true, self::TEST_DATA);
+        $mockBuilder = $this->setupMockBuilder(self::TEST_DATA);
 
         /** @var Question $model */
         $model = $this->setupMockModel($mockBuilder);

@@ -15,17 +15,7 @@ class AnswerTest extends AbstractModelTest
     {
         $mockBuilder = $this->createMockBuilderWithReturnData($returnData);
 
-        $queryConditions[] = [
-            'expects' => 'where',
-            'arguments' => ['entry_id', self::TEST_ENTRY_ID],
-        ];
-
-        $queryConditions[] = [
-            'expects' => 'where',
-            'arguments' => ['question_id', self::TEST_QUESTION_ID],
-        ];
-
-        $this->applyMockQueryConditions($mockBuilder, $queryConditions);
+        $this->ignoreQueryConditions($mockBuilder);
 
         return $mockBuilder;
     }

@@ -31,13 +31,22 @@ abstract class AbstractModelTest extends TestCase
     {
         $mockBuilder = Mockery::mock(Builder::class);
 
-        $mockBuilder->expects('get')
+        $mockBuilder->allows('get')
             ->andReturns(new Collection($returnData));
 
         return $mockBuilder;
     }
 
-    protected function applyMockQueryConditions(MockInterface $mockBuilder, array $conditions = []): void
+    protected function ignoreQueryConditions(MockInterface $mockBuilder): void
+    {
+        $mockBuilder->allows('where')
+            ->andReturnSelf();
+
+        $mockBuilder->allows('orderBy')
+            ->andReturnSelf();
+    }
+
+    protected function applyExpectedMockQueryConditions(MockInterface $mockBuilder, array $conditions = []): void
     {
         foreach ($conditions as $condition) {
             $mockBuilder->expects($condition['expects'])
