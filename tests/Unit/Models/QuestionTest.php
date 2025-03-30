@@ -3,51 +3,43 @@
 namespace Tests\Unit\Models;
 
 use App\Question;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
-use Mockery;
 use Mockery\MockInterface;
-use PHPUnit\Framework\TestCase;
 
 
-class QuestionTest extends TestCase
+class QuestionTest extends AbstractModelTest
 {
-    private const TEST_DATA = [
-        [1, 'A'],
-        [2, 'B'],
-    ];
-
     private function setupMockBuilder($withRequired = false, array $returnData = []): MockInterface
     {
-        $mockBuilder = Mockery::mock(Builder::class);
+        $mockBuilder = $this->createMockBuilderWithReturnData($returnData);
 
-        $mockBuilder->expects('where')
-            ->with('enabled', 1)
-            ->andReturnSelf();
+        $queryConditions[] = [
+            'expects' => 'where',
+            'arguments' => ['enabled', 1],
+        ];
 
         if ($withRequired) {
-            $mockBuilder->expects('where')
-                ->with('required', 1)
-                ->andReturnSelf();
+            $queryConditions[] = [
+                'expects' => 'where',
+                'arguments' => ['required', 1],
+            ];
         }
 
-        $mockBuilder->expects('orderBy')
-            ->with('id')
-            ->andReturnSelf();
+        $queryConditions[] = [
+            'expects' => 'orderBy',
+            'arguments' => ['id'],
+        ];
 
-        $mockBuilder->expects('get')
-            ->andReturns(new Collection($returnData));
+        $this->applyMockQueryConditions($mockBuilder, $queryConditions);
+
 
         return $mockBuilder;
     }
 
     private function setupMockModel(MockInterface $mockBuilder): MockInterface
     {
-        $mockModel = Mockery::mock(Question::class)->makePartial();
-
-        $mockModel->allows('newQuery')->andReturns($mockBuilder);
-
-        return $mockModel;
+        return $this->createPartialMockModel(Question::class, [
+            'newQuery' => $mockBuilder
+        ]);
     }
 
     public function testEnabledQuestionsReturnsEmptyCollection()
@@ -71,7 +63,7 @@ class QuestionTest extends TestCase
 
         $result = $model->enabled_questions();
 
-        $this->assertEquals(new Collection(self::TEST_DATA), $result);
+        $this->assertEquals($this->createTestDataCollection(), $result);
     }
 
     public function testRequiredQuestionsReturnsEmptyCollection()
@@ -95,6 +87,6 @@ class QuestionTest extends TestCase
 
         $result = $model->required_questions();
 
-        $this->assertEquals(new Collection(self::TEST_DATA), $result);
+        $this->assertEquals($this->createTestDataCollection(), $result);
     }
 }
