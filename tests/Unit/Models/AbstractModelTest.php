@@ -27,12 +27,22 @@ abstract class AbstractModelTest extends TestCase
         return $mockModel;
     }
 
-    protected function createMockBuilderWithReturnData(array $returnData = []): MockInterface
+    protected function createMockBuilderWithReturnData(array $returnData = [], string $getMethod = 'get'): MockInterface
     {
         $mockBuilder = Mockery::mock(Builder::class);
 
-        $mockBuilder->allows('get')
+        $mockBuilder->allows($getMethod)
             ->andReturns(new Collection($returnData));
+
+        return $mockBuilder;
+    }
+
+    protected function createMockBuilderWithReturnObject(object $returnObject, string $getMethod = 'get'): MockInterface
+    {
+        $mockBuilder = Mockery::mock(Builder::class);
+
+        $mockBuilder->allows($getMethod)
+            ->andReturns($returnObject);
 
         return $mockBuilder;
     }
