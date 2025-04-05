@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\Models;
 
-
 use App\Models\Answer;
 use Mockery\MockInterface;
+
 
 class AnswerTest extends AbstractModelTest
 {
@@ -41,13 +41,17 @@ class AnswerTest extends AbstractModelTest
 
     public function testFindByEntryAndQuestionsReturnsExpectedData()
     {
-        $mockBuilder = $this->setupMockBuilder([self::TEST_DATA[0]]);
+        $testAnswer = new Answer();
+        $testAnswer->entry_id = self::TEST_ENTRY_ID;
+        $testAnswer->question_id = self::TEST_QUESTION_ID;
+
+        $mockBuilder = $this->setupMockBuilder([$testAnswer]);
 
         /** @var Answer $model */
         $model = $this->setupMockModel($mockBuilder);
 
         $result = $model->find_by_entry_and_question(self::TEST_ENTRY_ID, self::TEST_QUESTION_ID);
 
-        $this->assertEquals(self::TEST_DATA[0], $result);
+        $this->assertEquals($testAnswer, $result);
     }
 }

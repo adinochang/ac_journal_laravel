@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 
 class Question extends Model
 {
@@ -17,9 +20,9 @@ class Question extends Model
     /**
      * Returns a list of answers to this question
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function answer()
+    public function answer(): HasMany
     {
         return $this->hasMany(Answer::class);
     }
@@ -29,9 +32,9 @@ class Question extends Model
     /**
      * Returns a list of active questions
      *
-     * @return Array
+     * @return Collection
      */
-    public function enabled_questions()
+    public function enabled_questions(): Collection
     {
         return $this->where('enabled', 1)->OrderBy('id')->get();
     }
@@ -41,9 +44,9 @@ class Question extends Model
     /**
      * Returns a list of questions that must be answered
      *
-     * @return Array
+     * @return Collection
      */
-    public function required_questions()
+    public function required_questions(): Collection
     {
         return $this->where('enabled', 1)->where('required', 1)->OrderBy('id')->get();
     }
@@ -55,7 +58,7 @@ class Question extends Model
      *
      * @return string
      */
-    public function getTable()
+    public function getTable(): string
     {
         return 'ac_journal_questions';
     }

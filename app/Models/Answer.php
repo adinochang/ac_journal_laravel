@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 
 class Answer extends Model
 {
@@ -17,9 +19,9 @@ class Answer extends Model
     /**
      * Returns the entry that contains this answer
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function entry()
+    public function entry(): BelongsTo
     {
         return $this->belongsTo(Entry::class);
     }
@@ -29,9 +31,9 @@ class Answer extends Model
     /**
      * Returns the question that this answer relates to
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function question()
+    public function question(): BelongsTo
     {
         return $this->belongsTo(Question::class);
     }
@@ -42,11 +44,11 @@ class Answer extends Model
      * Find all the answers from $request and format them into an array with the format of:
      * [ <question_id> => <answer_text> ]
      *
-     * This array can then be fed into the Entry model's save function
+     * This array can then be fed into the save function in the Entry model
      *
      * @return array
      */
-    public function get_answers_array_from_request()
+    public function get_answers_array_from_request(): array
     {
         $answers_array = [];
 
@@ -67,12 +69,12 @@ class Answer extends Model
     /**
      * Finds an answer filtered by entry_id and question_id
      *
-     * @param Integer  $entry_id
-     * @param Integer  $question_id
+     * @param int $entry_id
+     * @param int $question_id
      *
-     * @return Answer
+     * @return ?Answer
      */
-    public function find_by_entry_and_question($entry_id, $question_id)
+    public function find_by_entry_and_question(int $entry_id, int $question_id): ?Answer
     {
         $answers = $this->where('entry_id', $entry_id)->where('question_id', $question_id)->get();
         $answer = null;
@@ -92,7 +94,7 @@ class Answer extends Model
      *
      * @return string
      */
-    public function getTable()
+    public function getTable(): string
     {
         return 'ac_journal_answers';
     }

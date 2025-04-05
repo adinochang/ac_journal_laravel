@@ -4,6 +4,8 @@ namespace Tests\Unit\Models;
 
 use App\Models\Answer;
 use App\Models\Entry;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Mockery;
 use Mockery\MockInterface;
 
 
@@ -12,28 +14,23 @@ class EntryTest extends AbstractModelTest
     private const TEST_REQUIRED_LENGTH = 5;
     private const TEST_ANSWER = 'Lorem ipsum';
 
-    private function setupMockBuilder(Answer $answer): MockInterface
+
+    private function setupMockModel(Answer $mockAnswer): MockInterface
     {
-        $mockBuilder = $this->createMockBuilderWithReturnObject($answer, 'first');
 
-        $this->ignoreQueryConditions($mockBuilder);
+        $hasManyMock = Mockery::mock(HasMany::class);
 
-        return $mockBuilder;
-    }
+        $hasManyMock->allows('first')->andReturn($mockAnswer);
 
-    private function setupMockModel(MockInterface $mockBuilder): MockInterface
-    {
         return $this->createPartialMockModel(Entry::class, [
-            'answers' => $mockBuilder
+            'answers' => $hasManyMock
         ]);
     }
 
     public function testAnswerExcerptReturnsEmptyAnswer()
     {
-        $mockBuilder = $this->setupMockBuilder(new Answer(['answer_text' => '']));
-
         /** @var Entry $model */
-        $model = $this->setupMockModel($mockBuilder);
+        $model = $this->setupMockModel(new Answer(['answer_text' => '']));
 
         $result = $model->answer_excerpt(self::TEST_REQUIRED_LENGTH);
 
@@ -42,10 +39,8 @@ class EntryTest extends AbstractModelTest
 
     public function testAnswerExcerptReturnsLongAnswer()
     {
-        $mockBuilder = $this->setupMockBuilder(new Answer(['answer_text' => self::TEST_ANSWER]));
-
         /** @var Entry $model */
-        $model = $this->setupMockModel($mockBuilder);
+        $model = $this->setupMockModel(new Answer(['answer_text' => self::TEST_ANSWER]));
 
         $result = $model->answer_excerpt(self::TEST_REQUIRED_LENGTH);
 
@@ -56,12 +51,10 @@ class EntryTest extends AbstractModelTest
 
     public function testAnswerExcerptReturnsShortAnswer()
     {
-        $mockBuilder = $this->setupMockBuilder(new Answer([
+        /** @var Entry $model */
+        $model = $this->setupMockModel(new Answer([
             'answer_text' => substr(self::TEST_ANSWER, 0, self::TEST_REQUIRED_LENGTH - 1)
         ]));
-
-        /** @var Entry $model */
-        $model = $this->setupMockModel($mockBuilder);
 
         $result = $model->answer_excerpt(self::TEST_REQUIRED_LENGTH);
 

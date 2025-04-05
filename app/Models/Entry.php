@@ -2,16 +2,19 @@
 
 namespace App\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 
 class Entry extends Model
 {
     /**
      * Returns the answers in this journal entry
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function answers()
+    public function answers(): HasMany
     {
         return $this->hasMany(Answer::class);
     }
@@ -24,7 +27,7 @@ class Entry extends Model
      * @param int $required_length
      * @return string
      */
-    public function answer_excerpt($required_length)
+    public function answer_excerpt(int $required_length): string
     {
         $excerpt = '';
 
@@ -51,7 +54,7 @@ class Entry extends Model
      * Performs validation and returns the array of answers if validation is successful
      * @return array
      */
-    public function perform_request_validation()
+    public function perform_request_validation(): array
     {
         $question_model = new Question();
         $required_questions = $question_model->required_questions();
@@ -72,9 +75,9 @@ class Entry extends Model
      * Creates a new journal entry and saves the answers
      *
      * @param  array  $answers_array
-     * @return boolean
+     * @return bool
      */
-    public function save_answers($answers_array)
+    public function save_answers(array $answers_array): bool
     {
         if (!isset($answers_array) || sizeof($answers_array) == 0)
         {
@@ -110,9 +113,9 @@ class Entry extends Model
      * Updates the timestamp of the entry and updates the answers
      *
      * @param  array  $answers_array
-     * @return boolean
+     * @return bool
      */
-    public function update_answers($answers_array)
+    public function update_answers(array $answers_array): bool
     {
         if (!isset($answers_array) || sizeof($answers_array) == 0)
         {
@@ -130,7 +133,7 @@ class Entry extends Model
         {
             $answer = $answer_model->find_by_entry_and_question($this->id, $question_id);
 
-            $answer->answer_text = isset($answer_text) ? $answer_text : '';
+            $answer->answer_text = $answer_text ?? '';
 
             $answer->save();
         }
@@ -143,11 +146,10 @@ class Entry extends Model
     /**
      * Overrides default delete method. Must delete the entry answers before deleting the entry.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  array  $answers_array
-     * @return boolean
+     * @return void
+     * @throws Exception
      */
-    public function delete()
+    public function delete(): void
     {
         // delete answers first
         foreach($this->answers as $answer)
@@ -166,7 +168,7 @@ class Entry extends Model
      *
      * @return string
      */
-    public function getTable()
+    public function getTable(): string
     {
         return 'ac_journal_entries';
     }
