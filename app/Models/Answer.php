@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Http\Request;
 
 
 class Answer extends Model
@@ -46,13 +47,14 @@ class Answer extends Model
      *
      * This array can then be fed into the save function in the Entry model
      *
+     * @param Request $request
      * @return array
      */
-    public function get_answers_array_from_request(): array
+    public function get_answers_array_from_request(Request $request): array
     {
         $answers_array = [];
 
-        foreach (request()->all() as $name => $value)
+        foreach ($request->all() as $name => $value)
         {
             if (strpos($name, 'answer_') !== false)
             {

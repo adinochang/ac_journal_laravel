@@ -86,7 +86,7 @@ class EntryController extends Controller
 
         // save new entry with answers
         $answer_model = new Answer();
-        $answers_array = $answer_model->get_answers_array_from_request();
+        $answers_array = $answer_model->get_answers_array_from_request(request());
 
         if (!$entry_model->save_answers($answers_array))
         {
@@ -143,7 +143,7 @@ class EntryController extends Controller
 
         // get an array of answers from $request
         $answer_model = new Answer();
-        $answers_array = $answer_model->get_answers_array_from_request();
+        $answers_array = $answer_model->get_answers_array_from_request(request());
 
         // update entry with answers
         if (!$entry->update_answers($answers_array))
