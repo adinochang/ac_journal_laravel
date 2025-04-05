@@ -2,9 +2,8 @@
 
 namespace Tests\Unit\Models;
 
-use App\Answer;
-use App\Entry;
-use Mockery;
+use App\Models\Answer;
+use App\Models\Entry;
 use Mockery\MockInterface;
 
 

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Entry;
-use App\Question;
-use App\Answer;
+use App\Models\Entry;
+use App\Models\Question;
+use App\Models\Answer;
 use Carbon\Carbon;
 
 

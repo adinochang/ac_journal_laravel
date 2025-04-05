@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Models;
 
-use App\Question;
+use App\Models\Question;
 use Mockery\MockInterface;
 
 

@@ -2,7 +2,7 @@
 
 /** @var Factory $factory */
 
-use App\Answer;
+use App\Models\Answer;
 use Carbon\Carbon;
 use Faker\Generator as Faker;
 use Illuminate\Database\Eloquent\Factory;

@@ -3,7 +3,7 @@
 namespace Tests\Unit\Models;
 
 
-use App\Answer;
+use App\Models\Answer;
 use Mockery\MockInterface;
 
 class AnswerTest extends AbstractModelTest

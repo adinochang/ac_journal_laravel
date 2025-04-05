@@ -2,6 +2,9 @@
 
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
+use App\Models\Question;
+use App\Models\Entry;
+use App\Models\Answer;
 
 
 class DatabaseSeeder extends Seeder
@@ -14,8 +17,8 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // Create two dummy questions
-        factory(App\Question::class)->create();
-        factory(App\Question::class)->create();
+        factory(Question::class)->create();
+        factory(Question::class)->create();
 
 
         // Create 30 entries
@@ -25,10 +28,10 @@ class DatabaseSeeder extends Seeder
         {
             $created_at->addDay(random_int(1, 7));
 
-            $entry = factory(App\Entry::class)->create(['created_at' => $created_at->unix()]);
+            $entry = factory(Entry::class)->create(['created_at' => $created_at->unix()]);
 
-            factory(App\Answer::class)->create(['entry_id' => $entry->id, 'question_id' => 1, 'created_at' => $created_at->unix()]);
-            factory(App\Answer::class)->create(['entry_id' => $entry->id, 'question_id' => 2, 'created_at' => $created_at->unix()]);
+            factory(Answer::class)->create(['entry_id' => $entry->id, 'question_id' => 1, 'created_at' => $created_at->unix()]);
+            factory(Answer::class)->create(['entry_id' => $entry->id, 'question_id' => 2, 'created_at' => $created_at->unix()]);
         }
     }
 }
