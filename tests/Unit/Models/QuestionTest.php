@@ -6,7 +6,7 @@ use App\Models\Question;
 use Mockery\MockInterface;
 
 
-class QuestionTest extends AbstractModelTest
+class QuestionTest extends ModelTestCase
 {
     private function setupMockBuilder(array $returnData = []): MockInterface
     {

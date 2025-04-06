@@ -7,7 +7,7 @@ use Mockery\MockInterface;
 use Illuminate\Http\Request;
 
 
-class AnswerTest extends AbstractModelTest
+class AnswerTest extends ModelTestCase
 {
     private const TEST_ENTRY_ID = 1;
     private const TEST_QUESTION_ID = 11;
