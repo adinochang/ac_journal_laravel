@@ -48,7 +48,7 @@
                 <tbody>
                 @foreach ($entries as $entry)
                     <tr>
-                        <td><a href="{{ route('entry.edit', $entry) }}" class="button alt icon fa-pencil small" style="margin-right: 1em;">Edit</a> {{ $entry->answer_excerpt(50) }}</td>
+                        <td><a href="{{ route('entry.edit', $entry) }}" class="button alt icon fa-pencil small" style="margin-right: 1em;">Edit</a> {{ $entry->answerExcerpt(50) }}</td>
                         <td>{{ date('Y-m-d H:i:s',strtotime($entry->updated_at)) }}</td>
                     </tr>
                 @endforeach

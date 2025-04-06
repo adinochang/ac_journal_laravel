@@ -14,7 +14,7 @@ class AnswerTest extends ModelTestCase
 
     private function setupMockBuilder(array $returnData = []): MockInterface
     {
-        $mockBuilder = $this->createMockBuilderWithReturnData($returnData);
+        $mockBuilder = $this->createMockBuilderReturnsData($returnData);
 
         $this->ignoreQueryConditions($mockBuilder);
 
@@ -43,7 +43,7 @@ class AnswerTest extends ModelTestCase
         /** @var Answer $model */
         $model = $this->createPartialMockModel(Answer::class);
 
-        $result = $model->get_answers_array_from_request($mockRequest);
+        $result = $model->getAnswersArrayFromRequest($mockRequest);
 
         $this->assertEquals([], $result);
     }
@@ -61,7 +61,7 @@ class AnswerTest extends ModelTestCase
         /** @var Answer $model */
         $model = $this->createPartialMockModel(Answer::class);
 
-        $result = $model->get_answers_array_from_request($mockRequest);
+        $result = $model->getAnswersArrayFromRequest($mockRequest);
 
         $this->assertEquals([], $result);
     }
@@ -86,7 +86,7 @@ class AnswerTest extends ModelTestCase
         /** @var Answer $model */
         $model = $this->createPartialMockModel(Answer::class);
 
-        $result = $model->get_answers_array_from_request($mockRequest);
+        $result = $model->getAnswersArrayFromRequest($mockRequest);
 
         $this->assertEquals($expectedResult, $result);
     }
@@ -98,7 +98,7 @@ class AnswerTest extends ModelTestCase
         /** @var Answer $model */
         $model = $this->setupMockModel($mockBuilder);
 
-        $result = $model->find_by_entry_and_question(self::TEST_ENTRY_ID, self::TEST_QUESTION_ID);
+        $result = $model->findByEntryAndQuestion(self::TEST_ENTRY_ID, self::TEST_QUESTION_ID);
 
         $this->assertEmpty($result);
     }
@@ -114,7 +114,7 @@ class AnswerTest extends ModelTestCase
         /** @var Answer $model */
         $model = $this->setupMockModel($mockBuilder);
 
-        $result = $model->find_by_entry_and_question(self::TEST_ENTRY_ID, self::TEST_QUESTION_ID);
+        $result = $model->findByEntryAndQuestion(self::TEST_ENTRY_ID, self::TEST_QUESTION_ID);
 
         $this->assertEquals($testAnswer, $result);
     }

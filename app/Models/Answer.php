@@ -50,20 +50,20 @@ class Answer extends Model
      * @param Request $request
      * @return array
      */
-    public function get_answers_array_from_request(Request $request): array
+    public function getAnswersArrayFromRequest(Request $request): array
     {
-        $answers_array = [];
+        $answers = [];
 
-        foreach ($request->all() as $name => $value)
+        foreach ($request->all() as $fieldName => $value)
         {
-            if (strpos($name, 'answer_') !== false)
+            if (strpos($fieldName, 'answer_') !== false)
             {
                 // format the answers in the format of [ question_id => answer text ]
-                $answers_array[str_replace('answer_', '', $name)] = $value;
+                $answers[str_replace('answer_', '', $fieldName)] = $value;
             }
         }
 
-        return $answers_array;
+        return $answers;
     }
 
 
@@ -76,7 +76,7 @@ class Answer extends Model
      *
      * @return ?Answer
      */
-    public function find_by_entry_and_question(int $entry_id, int $question_id): ?Answer
+    public function findByEntryAndQuestion(int $entry_id, int $question_id): ?Answer
     {
         $answers = $this->where('entry_id', $entry_id)->where('question_id', $question_id)->get();
         $answer = null;

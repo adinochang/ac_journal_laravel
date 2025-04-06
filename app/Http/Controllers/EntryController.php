@@ -67,7 +67,7 @@ class EntryController extends Controller
 
 
         return view('entries.create', [
-            'questions' => $question_model->enabled_questions()
+            'questions' => $question_model->enabledQuestions()
         ]);
     }
 
@@ -85,13 +85,13 @@ class EntryController extends Controller
         $questionModel = new Question();
 
         $entry_model = new Entry();
-        $entry_model->perform_request_validation(request(), $questionModel->required_questions());
+        $entry_model->performRequestValidation(request(), $questionModel->requiredQuestions());
 
         // save new entry with answers
         $answer_model = new Answer();
-        $answers_array = $answer_model->get_answers_array_from_request(request());
+        $answers_array = $answer_model->getAnswersArrayFromRequest(request());
 
-        if (!$entry_model->save_answers($answer_model, $answers_array))
+        if (!$entry_model->saveAnswers($answer_model, $answers_array))
         {
             abort('500');
         }
@@ -144,14 +144,14 @@ class EntryController extends Controller
         $questionModel = new Question();
 
         // validation
-        $entry->perform_request_validation(request(), $questionModel->required_questions());
+        $entry->performRequestValidation(request(), $questionModel->requiredQuestions());
 
         // get an array of answers from $request
         $answer_model = new Answer();
-        $answers_array = $answer_model->get_answers_array_from_request(request());
+        $answers_array = $answer_model->getAnswersArrayFromRequest(request());
 
         // update entry with answers
-        if (!$entry->update_answers($answer_model, $answers_array))
+        if (!$entry->updateAnswers($answer_model, $answers_array))
         {
             abort('500');
         }

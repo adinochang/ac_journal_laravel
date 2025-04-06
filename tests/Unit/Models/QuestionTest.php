@@ -10,7 +10,7 @@ class QuestionTest extends ModelTestCase
 {
     private function setupMockBuilder(array $returnData = []): MockInterface
     {
-        $mockBuilder = $this->createMockBuilderWithReturnData($returnData);
+        $mockBuilder = $this->createMockBuilderReturnsData($returnData);
 
         $this->ignoreQueryConditions($mockBuilder);
 
@@ -24,50 +24,50 @@ class QuestionTest extends ModelTestCase
         ]);
     }
 
-    public function testEnabledQuestionsReturnsEmptyCollection()
+    public function testEnabledQuestionsWithoutData()
     {
         $mockBuilder = $this->setupMockBuilder();
 
         /** @var Question $model */
         $model = $this->setupMockModel($mockBuilder);
 
-        $result = $model->enabled_questions();
+        $result = $model->enabledQuestions();
 
         $this->assertEmpty($result);
     }
 
-    public function testEnabledQuestionsReturnsExpectedData()
+    public function testEnabledQuestionsWithData()
     {
         $mockBuilder = $this->setupMockBuilder(self::TEST_DATA);
 
         /** @var Question $model */
         $model = $this->setupMockModel($mockBuilder);
 
-        $result = $model->enabled_questions();
+        $result = $model->enabledQuestions();
 
         $this->assertEquals($this->createTestDataCollection(), $result);
     }
 
-    public function testRequiredQuestionsReturnsEmptyCollection()
+    public function testRequiredQuestionsWithoutData()
     {
         $mockBuilder = $this->setupMockBuilder();
 
         /** @var Question $model */
         $model = $this->setupMockModel($mockBuilder);
 
-        $result = $model->required_questions();
+        $result = $model->requiredQuestions();
 
         $this->assertEmpty($result);
     }
 
-    public function testRequiredQuestionsReturnsExpectedData()
+    public function testRequiredQuestionsWithData()
     {
         $mockBuilder = $this->setupMockBuilder(self::TEST_DATA);
 
         /** @var Question $model */
         $model = $this->setupMockModel($mockBuilder);
 
-        $result = $model->required_questions();
+        $result = $model->requiredQuestions();
 
         $this->assertEquals($this->createTestDataCollection(), $result);
     }

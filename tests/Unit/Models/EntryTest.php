@@ -43,7 +43,7 @@ class EntryTest extends ModelTestCase
         /** @var Entry $model */
         $model = $this->setupMockModel(new Answer(['answer_text' => '']));
 
-        $result = $model->answer_excerpt(self::TEST_REQUIRED_LENGTH);
+        $result = $model->answerExcerpt(self::TEST_REQUIRED_LENGTH);
 
         $this->assertEquals('', $result);
     }
@@ -53,7 +53,7 @@ class EntryTest extends ModelTestCase
         /** @var Entry $model */
         $model = $this->setupMockModel(new Answer(['answer_text' => self::TEST_ANSWER]));
 
-        $result = $model->answer_excerpt(self::TEST_REQUIRED_LENGTH);
+        $result = $model->answerExcerpt(self::TEST_REQUIRED_LENGTH);
 
         $this->assertEquals(
             substr(self::TEST_ANSWER, 0, self::TEST_REQUIRED_LENGTH) . '...', $result
@@ -67,7 +67,7 @@ class EntryTest extends ModelTestCase
             'answer_text' => substr(self::TEST_ANSWER, 0, self::TEST_REQUIRED_LENGTH - 1)
         ]));
 
-        $result = $model->answer_excerpt(self::TEST_REQUIRED_LENGTH);
+        $result = $model->answerExcerpt(self::TEST_REQUIRED_LENGTH);
 
         $this->assertEquals(
             substr(self::TEST_ANSWER, 0, self::TEST_REQUIRED_LENGTH - 1), $result
@@ -93,7 +93,7 @@ class EntryTest extends ModelTestCase
         /** @var Entry $model */
         $model = $this->createPartialMockModel(Entry::class, []);
 
-        $model->perform_request_validation($mockRequest, $requiredQuestions);
+        $model->performRequestValidation($mockRequest, $requiredQuestions);
 
         $this->assertTrue(true);
     }
@@ -118,7 +118,7 @@ class EntryTest extends ModelTestCase
         /** @var Entry $model */
         $model = $this->createPartialMockModel(Entry::class, []);
 
-        $model->perform_request_validation($mockRequest, $requiredQuestions);
+        $model->performRequestValidation($mockRequest, $requiredQuestions);
     }
 
     public function testSaveAnswersWithoutAnswers()
@@ -126,7 +126,7 @@ class EntryTest extends ModelTestCase
         /** @var Entry $model */
         $model = $this->createPartialMockModel(Entry::class, []);
 
-        $result = $model->save_answers(new Answer(), []);
+        $result = $model->saveAnswers(new Answer(), []);
 
         $this->assertFalse($result);
     }
@@ -148,7 +148,7 @@ class EntryTest extends ModelTestCase
         $answerModel = $this->createPartialMockModel(Answer::class, []);
         $answerModel->allows('create')->times(sizeof($testAnswers))->andReturn(true);
 
-        $result = $entryModel->save_answers($answerModel, $testAnswers);
+        $result = $entryModel->saveAnswers($answerModel, $testAnswers);
 
         $this->assertTrue($result);
     }
@@ -170,7 +170,7 @@ class EntryTest extends ModelTestCase
         $answerModel = $this->createPartialMockModel(Answer::class, []);
         $answerModel->allows('create')->times(sizeof($testAnswers) - 1)->andReturn(true);
 
-        $result = $entryModel->save_answers($answerModel, $testAnswers);
+        $result = $entryModel->saveAnswers($answerModel, $testAnswers);
 
         $this->assertTrue($result);
     }
@@ -180,7 +180,7 @@ class EntryTest extends ModelTestCase
         /** @var Entry $model */
         $model = $this->createPartialMockModel(Entry::class, []);
 
-        $result = $model->update_answers(new Answer(), []);
+        $result = $model->updateAnswers(new Answer(), []);
 
         $this->assertFalse($result);
     }
@@ -206,9 +206,9 @@ class EntryTest extends ModelTestCase
 
         /** @var Answer|MockInterface $answerModel */
         $answerModel = $this->createPartialMockModel(Answer::class, []);
-        $answerModel->allows('find_by_entry_and_question')->times(sizeof($testAnswers))->andReturn($mockAnswer);
+        $answerModel->allows('findByEntryAndQuestion')->times(sizeof($testAnswers))->andReturn($mockAnswer);
 
-        $result = $entryModel->update_answers($answerModel, $testAnswers);
+        $result = $entryModel->updateAnswers($answerModel, $testAnswers);
 
         $this->assertTrue($result);
     }

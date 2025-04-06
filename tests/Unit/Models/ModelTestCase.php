@@ -31,7 +31,7 @@ class ModelTestCase extends TestCase
         return $mockModel;
     }
 
-    protected function createMockBuilderWithReturnData(array $returnData = [], string $getMethod = 'get'): MockInterface
+    protected function createMockBuilderReturnsData(array $returnData = [], string $getMethod = 'get'): MockInterface
     {
         $mockBuilder = Mockery::mock(Builder::class);
 
@@ -41,7 +41,7 @@ class ModelTestCase extends TestCase
         return $mockBuilder;
     }
 
-    protected function createMockBuilderWithReturnObject(object $returnObject, string $getMethod = 'get'): MockInterface
+    protected function createMockBuilderReturnsObject(object $returnObject, string $getMethod = 'get'): MockInterface
     {
         $mockBuilder = Mockery::mock(Builder::class);
 

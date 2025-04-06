@@ -29,16 +29,16 @@ class Entry extends Model
      * @param int $required_length
      * @return string
      */
-    public function answer_excerpt(int $required_length): string
+    public function answerExcerpt(int $required_length): string
     {
         $excerpt = '';
 
         // get the first answer from this entry
-        $first_answer = $this->answers()->first();
+        $firstAnswer = $this->answers()->first();
 
-        if (isset($first_answer))
+        if (isset($firstAnswer))
         {
-            $excerpt = $first_answer->answer_text;
+            $excerpt = $firstAnswer->answer_text;
 
             // if the answer is too long, truncate it
             if (strlen($excerpt) > $required_length)
@@ -60,16 +60,16 @@ class Entry extends Model
      * @param Collection $requiredQuestions
      * @return array
      */
-    public function perform_request_validation(Request $request, Collection $requiredQuestions): array
+    public function performRequestValidation(Request $request, Collection $requiredQuestions): array
     {
-        $validation_array = [];
+        $validationRules = [];
 
-        foreach($requiredQuestions as $required_question)
+        foreach($requiredQuestions as $requiredQuestion)
         {
-            $validation_array['answer_' . $required_question->id] = 'required';
+            $validationRules['answer_' . $requiredQuestion->id] = 'required';
         }
 
-        return $request->validate($validation_array);
+        return $request->validate($validationRules);
     }
 
 
@@ -81,7 +81,7 @@ class Entry extends Model
      * @param  array $answers_array
      * @return bool
      */
-    public function save_answers(Answer $answerModel, array $answers_array): bool
+    public function saveAnswers(Answer $answerModel, array $answers_array): bool
     {
         if (!isset($answers_array) || sizeof($answers_array) == 0)
         {
@@ -92,14 +92,14 @@ class Entry extends Model
         $this->save();
 
         // save answers for the entry
-        foreach($answers_array as $question_id => $answer_text)
+        foreach($answers_array as $questionId => $answerText)
         {
-            if (strlen($answer_text) > 0)
+            if (strlen($answerText) > 0)
             {
                 $answerModel->create([
                     'entry_id' => $this->id,
-                    'question_id' => $question_id,
-                    'answer_text' => $answer_text,
+                    'question_id' => $questionId,
+                    'answer_text' => $answerText,
                 ]);
             }
         }
@@ -113,12 +113,12 @@ class Entry extends Model
      * Updates the timestamp of the entry and updates the answers
      *
      * @param Answer $answerModel
-     * @param array $answers_array
+     * @param array $answers
      * @return bool
      */
-    public function update_answers(Answer $answerModel, array $answers_array): bool
+    public function updateAnswers(Answer $answerModel, array $answers): bool
     {
-        if (!isset($answers_array) || sizeof($answers_array) == 0)
+        if (!isset($answers) || sizeof($answers) == 0)
         {
             return false;
         }
@@ -127,11 +127,11 @@ class Entry extends Model
         $this->setUpdatedAt(now());
         $this->save();
 
-        foreach($answers_array as $question_id => $answer_text)
+        foreach($answers as $questionId => $answerText)
         {
-            $answer = $answerModel->find_by_entry_and_question($this->id, $question_id);
+            $answer = $answerModel->findByEntryAndQuestion($this->id, $questionId);
 
-            $answer->answer_text = $answer_text ?? '';
+            $answer->answer_text = $answerText ?? '';
 
             $answer->save();
         }

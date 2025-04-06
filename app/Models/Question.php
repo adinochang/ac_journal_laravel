@@ -34,7 +34,7 @@ class Question extends Model
      *
      * @return Collection
      */
-    public function enabled_questions(): Collection
+    public function enabledQuestions(): Collection
     {
         return $this->where('enabled', 1)->OrderBy('id')->get();
     }
@@ -46,7 +46,7 @@ class Question extends Model
      *
      * @return Collection
      */
-    public function required_questions(): Collection
+    public function requiredQuestions(): Collection
     {
         return $this->where('enabled', 1)->where('required', 1)->OrderBy('id')->get();
     }
