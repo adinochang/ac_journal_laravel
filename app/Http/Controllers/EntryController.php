@@ -81,14 +81,17 @@ class EntryController extends Controller
     public function store()
     {
         // validation
+        // TODO: Change to use DI
+        $questionModel = new Question();
+
         $entry_model = new Entry();
-        $entry_model->perform_request_validation();
+        $entry_model->perform_request_validation(request(), $questionModel->required_questions());
 
         // save new entry with answers
         $answer_model = new Answer();
         $answers_array = $answer_model->get_answers_array_from_request(request());
 
-        if (!$entry_model->save_answers($answers_array))
+        if (!$entry_model->save_answers($answer_model, $answers_array))
         {
             abort('500');
         }
@@ -138,19 +141,20 @@ class EntryController extends Controller
      */
     public function update(Entry $entry)
     {
+        $questionModel = new Question();
+
         // validation
-        $entry->perform_request_validation();
+        $entry->perform_request_validation(request(), $questionModel->required_questions());
 
         // get an array of answers from $request
         $answer_model = new Answer();
         $answers_array = $answer_model->get_answers_array_from_request(request());
 
         // update entry with answers
-        if (!$entry->update_answers($answers_array))
+        if (!$entry->update_answers($answer_model, $answers_array))
         {
             abort('500');
         }
-
 
         return redirect(route('entry.index'))->with('message','Update successful');
     }

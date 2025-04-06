@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Http\Request;
 
 
 class Entry extends Model
@@ -52,21 +54,22 @@ class Entry extends Model
 
     /**
      * Performs validation and returns the array of answers if validation is successful
+     * TODO: This should be in the controller
+     *
+     * @param Request $request
+     * @param Collection $requiredQuestions
      * @return array
      */
-    public function perform_request_validation(): array
+    public function perform_request_validation(Request $request, Collection $requiredQuestions): array
     {
-        $question_model = new Question();
-        $required_questions = $question_model->required_questions();
-
         $validation_array = [];
 
-        foreach($required_questions as $required_question)
+        foreach($requiredQuestions as $required_question)
         {
             $validation_array['answer_' . $required_question->id] = 'required';
         }
 
-        return request()->validate($validation_array);
+        return $request->validate($validation_array);
     }
 
 
@@ -74,29 +77,26 @@ class Entry extends Model
     /**
      * Creates a new journal entry and saves the answers
      *
-     * @param  array  $answers_array
+     * @param  Answer $answerModel
+     * @param  array $answers_array
      * @return bool
      */
-    public function save_answers(array $answers_array): bool
+    public function save_answers(Answer $answerModel, array $answers_array): bool
     {
         if (!isset($answers_array) || sizeof($answers_array) == 0)
         {
             return false;
         }
 
-
-
         // create an entry record
         $this->save();
-
-
 
         // save answers for the entry
         foreach($answers_array as $question_id => $answer_text)
         {
             if (strlen($answer_text) > 0)
             {
-                Answer::create([
+                $answerModel->create([
                     'entry_id' => $this->id,
                     'question_id' => $question_id,
                     'answer_text' => $answer_text,
@@ -112,10 +112,11 @@ class Entry extends Model
     /**
      * Updates the timestamp of the entry and updates the answers
      *
-     * @param  array  $answers_array
+     * @param Answer $answerModel
+     * @param array $answers_array
      * @return bool
      */
-    public function update_answers(array $answers_array): bool
+    public function update_answers(Answer $answerModel, array $answers_array): bool
     {
         if (!isset($answers_array) || sizeof($answers_array) == 0)
         {
@@ -126,12 +127,9 @@ class Entry extends Model
         $this->setUpdatedAt(now());
         $this->save();
 
-        // save answers for the entry
-        $answer_model = new Answer();
-
         foreach($answers_array as $question_id => $answer_text)
         {
-            $answer = $answer_model->find_by_entry_and_question($this->id, $question_id);
+            $answer = $answerModel->find_by_entry_and_question($this->id, $question_id);
 
             $answer->answer_text = $answer_text ?? '';
 
