@@ -169,7 +169,7 @@ class QuestionControllerTest extends ControllerTestCase
             };
         });
 
-
+        /** @var QuestionController $controller */
         $controller = Mockery::mock(QuestionController::class)->makePartial();
         $controller->allows('index')->once();
 

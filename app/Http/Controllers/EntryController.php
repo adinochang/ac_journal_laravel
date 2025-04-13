@@ -6,7 +6,15 @@ use App\Models\Entry;
 use App\Models\Question;
 use App\Models\Answer;
 use Carbon\Carbon;
-
+use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 
 class EntryController extends Controller
@@ -14,7 +22,7 @@ class EntryController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Application|Factory|View
      */
     public function index()
     {
@@ -28,20 +36,16 @@ class EntryController extends Controller
             $entries = Entry::orderByDesc('id')->paginate(5);
         }
 
-
-
-
         return view('entries.index', [
             'entries' => $entries
         ]);
     }
 
 
-
     /**
      * Finds entries for the home view in blog entry format
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Application|Factory|View
      */
     public function blog()
     {
@@ -53,30 +57,26 @@ class EntryController extends Controller
     }
 
 
-
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Application|Factory|View
      */
     public function create()
     {
         // retrieve the list of questions
-        $question_model = new Question();
-
-
+        $question = new Question();
 
         return view('entries.create', [
-            'questions' => $question_model->enabledQuestions()
+            'questions' => $question->enabledQuestions()
         ]);
     }
-
 
 
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return Application|RedirectResponse|Redirector
      */
     public function store()
     {
@@ -84,31 +84,30 @@ class EntryController extends Controller
         // TODO: Change to use DI
         $questionModel = new Question();
 
-        $entry_model = new Entry();
-        $entry_model->performRequestValidation(request(), $questionModel->requiredQuestions());
+        $entry = new Entry();
+        $entry->performRequestValidation(request(), $questionModel->requiredQuestions());
 
         // save new entry with answers
-        $answer_model = new Answer();
-        $answers_array = $answer_model->getAnswersArrayFromRequest(request());
+        $answer = new Answer();
+        $answers = $answer->getAnswersArrayFromRequest(request());
 
-        if (!$entry_model->saveAnswers($answer_model, $answers_array))
+        if (!$entry->saveAnswers($answer, $answers))
         {
             abort('500');
         }
 
         // redirect to previous URL
-        $previous_url = request('previous_url');
+        $previousUrl = request('previous_url');
 
-        return redirect(isset($previous_url) ? $previous_url : route('entry.index'))->with('message','Save successful');
+        return redirect($previousUrl ?? route('entry.index'))->with('message','Save successful');
     }
-
 
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Entry  $entry
-     * @return \Illuminate\Http\Response
+     * @param Entry $entry
+     * @return Application|ResponseFactory|Response
      */
     public function show(Entry $entry)
     {
@@ -116,12 +115,11 @@ class EntryController extends Controller
     }
 
 
-
     /**
      * Show the form for editing the specified resource.
      *
      * @param  Entry  $entry
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Application|Factory|View
      */
     public function edit(Entry $entry)
     {
@@ -132,12 +130,11 @@ class EntryController extends Controller
     }
 
 
-
     /**
      * Update the specified resource in storage.
      *
      * @param  Entry  $entry
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return Application|RedirectResponse|Redirector
      */
     public function update(Entry $entry)
     {
@@ -147,11 +144,11 @@ class EntryController extends Controller
         $entry->performRequestValidation(request(), $questionModel->requiredQuestions());
 
         // get an array of answers from $request
-        $answer_model = new Answer();
-        $answers_array = $answer_model->getAnswersArrayFromRequest(request());
+        $answer = new Answer();
+        $answers = $answer->getAnswersArrayFromRequest(request());
 
         // update entry with answers
-        if (!$entry->updateAnswers($answer_model, $answers_array))
+        if (!$entry->updateAnswers($answer, $answers))
         {
             abort('500');
         }
@@ -160,12 +157,11 @@ class EntryController extends Controller
     }
 
 
-
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Entry  $entry
-     * @return \Illuminate\Http\Response
+     * @param Entry  $entry
+     * @return Application|RedirectResponse|Redirector|void
      */
     public function destroy(Entry $entry)
     {
@@ -176,41 +172,39 @@ class EntryController extends Controller
 
             return redirect(route('entry.index'))->with('message','Delete successful');
         }
-        catch (\Exception $exception)
+        catch (Exception $exception)
         {
             abort(404);
         }
     }
 
 
-
     /**
      * Display the reports page.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Application|Factory|View
      */
     public function report()
     {
         // get the number of journal entries per month from the past year
-        $monthly_count = \DB::table('ac_journal_entries')
-            ->select(\DB::raw('DATE_FORMAT(created_at, "%b %Y") AS `created_month`, DATE_FORMAT(created_at, "%Y%m") AS `sort_month`, COUNT(*) `entry_count`'))
+        $monthlyCount = DB::table('ac_journal_entries')
+            ->select(DB::raw('DATE_FORMAT(created_at, "%b %Y") AS `created_month`, DATE_FORMAT(created_at, "%Y%m") AS `sort_month`, COUNT(*) `entry_count`'))
             ->where('created_at', '>=', Carbon::now()->subDays(366) )
             ->groupBy('created_month', 'sort_month')
             ->orderBy('sort_month')
             ->get();
 
-        $monthly_entries = [];
+        $monthlyEntries = [];
 
-        foreach($monthly_count as $month)
+        foreach($monthlyCount as $month)
         {
-            $monthly_entries[$month->created_month] = $month->entry_count;
+            $monthlyEntries[$month->created_month] = $month->entry_count;
         }
 
 
-
         // get the journal entry answers from the past year
-        $entries_words = [];
-        $average_words = [];
+        $entriesWords = [];
+        $averageWords = [];
 
         $entries = Entry::where('created_at', '>=', Carbon::now()->subDays(366) )
             ->orderBy('created_at', 'asc')
@@ -219,36 +213,35 @@ class EntryController extends Controller
         // for each entry count the number of words and update the average_words result array
         foreach($entries as $entry)
         {
-            $word_count = 0;
+            $wordCount = 0;
             foreach($entry->answers as $answer)
             {
-                $word_count += str_word_count($answer->answer_text, 0);
+                $wordCount += str_word_count($answer->answer_text);
             }
 
-            $month_label = $entry->created_at->format('M Y');
+            $monthLabel = $entry->created_at->format('M Y');
 
-            if (!isset($entries_words[$month_label]))
+            if (!isset($entriesWords[$monthLabel]))
             {
-                $entries_words[$month_label] = [
+                $entriesWords[$monthLabel] = [
                     'word_count' => 0,
                     'entry_count' => 0,
                 ];
             }
 
             // add word count total
-            $entries_words[$month_label]['word_count'] += $word_count;
-            $entries_words[$month_label]['entry_count'] += 1;
+            $entriesWords[$monthLabel]['word_count'] += $wordCount;
+            $entriesWords[$monthLabel]['entry_count'] += 1;
 
             // update the average
-            $average_words[$month_label] = round($entries_words[$month_label]['word_count'] / $entries_words[$month_label]['entry_count'], 1);
+            $averageWords[$monthLabel] = round($entriesWords[$monthLabel]['word_count'] / $entriesWords[$monthLabel]['entry_count'], 1);
         }
-
 
 
         // return report data to view
         return view('entries.report', [
-            'monthly_entries' => $monthly_entries,
-            'average_words' => $average_words,
+            'monthly_entries' => $monthlyEntries,
+            'average_words' => $averageWords,
         ]);
     }
 }

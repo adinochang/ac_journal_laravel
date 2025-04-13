@@ -3,7 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Question;
-
+use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
+use Illuminate\View\View;
 
 
 class QuestionController extends Controller
@@ -11,7 +18,7 @@ class QuestionController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Application|Factory|View
      */
     public function index()
     {
@@ -24,19 +31,16 @@ class QuestionController extends Controller
             $questions = Question::paginate(5);
         }
 
-
-
         return view('questions.index', [
             'questions' => $questions
         ]);
     }
 
 
-
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Application|Factory|View
      */
     public function create()
     {
@@ -44,33 +48,31 @@ class QuestionController extends Controller
     }
 
 
-
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return Application|RedirectResponse|Redirector
      */
     public function store()
     {
         // validation
-        $validated_input = request()->validate([
+        $validatedInput = request()->validate([
             'label' => ['required','max:200'],
             'required' => 'required',
             'enabled' => 'required',
         ]);
 
-        Question::create($validated_input);
+        Question::create($validatedInput);
 
         return redirect(route('question.index'))->with('message','Save successful');
     }
 
 
-
     /**
      * Display the specified resource.
      *
-     * @param  \App\Question  $question
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param Question $question
+     * @return Application|ResponseFactory|Response
      */
     public function show(Question $question)
     {
@@ -78,12 +80,11 @@ class QuestionController extends Controller
     }
 
 
-
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Question  $question
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param Question $question
+     * @return Application|Factory|View
      */
     public function edit(Question $question)
     {
@@ -93,34 +94,33 @@ class QuestionController extends Controller
     }
 
 
-
     /**
      * Update the specified resource in storage.
      *
-     * @param  Question  $question
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+    * /**
+     * @param Question $question
+     * @return Application|RedirectResponse|Redirector
      */
     public function update(Question $question)
     {
         // validation
-        $validated_input = request()->validate([
+        $validatedInput = request()->validate([
             'label' => ['required','max:200'],
             'required' => 'required',
             'enabled' => 'required',
         ]);
 
-        $question->update($validated_input);
+        $question->update($validatedInput);
 
         return redirect(route('question.index'))->with('message','Update successful');
     }
 
 
-
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Question  $question
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @param Question $question
+     * @return Application|RedirectResponse|Redirector|void
      */
     public function destroy(Question $question)
     {
@@ -131,7 +131,7 @@ class QuestionController extends Controller
 
             return redirect(route('question.index'))->with('message','Delete successful');
         }
-        catch (\Exception $exception)
+        catch (Exception $exception)
         {
             abort(404);
         }
