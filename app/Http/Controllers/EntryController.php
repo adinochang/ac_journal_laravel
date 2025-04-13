@@ -178,7 +178,6 @@ class EntryController extends Controller
         }
         catch (\Exception $exception)
         {
-            dd($exception);
             abort(404);
         }
     }
