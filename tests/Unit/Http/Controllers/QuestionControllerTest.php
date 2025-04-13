@@ -5,8 +5,6 @@ namespace Tests\Unit\Http\Controllers;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use App\Http\Controllers\QuestionController;
 use App\Models\Question;
@@ -115,15 +113,6 @@ class QuestionControllerTest extends ControllerTestCase
             ->andReturn($validInput);
         app()->instance('request', $mockRequest);
 
-
-        Route::shouldReceive('has')
-            ->with('question.index')
-            ->andReturn(true);
-
-        URL::shouldReceive('route')
-            ->with('question.index', [], true)
-            ->andReturn('/questions');
-
         $mockRedirect = Mockery::mock();
         $mockRedirect->allows('with')
             ->once()
@@ -151,15 +140,6 @@ class QuestionControllerTest extends ControllerTestCase
         $testQuestion = Mockery::mock(Question::class)->makePartial();
         $testQuestion->allows('delete')->once()->andThrow(new Exception('Something went wrong!'));
 
-
-        Route::shouldReceive('has')
-            ->with('question.index')
-            ->andReturn(true);
-
-        URL::shouldReceive('route')
-            ->with('question.index', [], true)
-            ->andReturn('/questions');
-
         /** @var QuestionController $controller */
         $controller = Mockery::mock(QuestionController::class)->makePartial();
         $controller->allows('index')->never();
@@ -174,15 +154,6 @@ class QuestionControllerTest extends ControllerTestCase
         /** @var Question $testQuestion */
         $testQuestion = Mockery::mock(Question::class)->makePartial();
         $testQuestion->allows('delete')->once()->andReturns(true);
-
-
-        Route::shouldReceive('has')
-            ->with('question.index')
-            ->andReturn(true);
-
-        URL::shouldReceive('route')
-            ->with('question.index', [], true)
-            ->andReturn('/questions');
 
         $mockRedirect = Mockery::mock();
         $mockRedirect->allows('with')
