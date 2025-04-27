@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Question;
+use App\Repositories\QuestionRepository;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -15,6 +16,17 @@ use Illuminate\View\View;
 
 class QuestionController extends Controller
 {
+    protected $questionRepo;
+
+
+    /**
+     * @param QuestionRepository $questionRepo
+     */
+    public function __construct(QuestionRepository $questionRepo)
+    {
+        $this->questionRepo = $questionRepo;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -22,14 +34,8 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        if(isset(request()->filter_label))
-        {
-            $questions = Question::where('label', 'like' , '%' . request()->filter_label . '%')->paginate(5);
-        }
-        else
-        {
-            $questions = Question::paginate(5);
-        }
+        $filter = request()->filter_label ?? null;
+        $questions = $this->questionRepo->getFilteredQuestions($filter);
 
         return view('questions.index', [
             'questions' => $questions
@@ -62,7 +68,7 @@ class QuestionController extends Controller
             'enabled' => 'required',
         ]);
 
-        Question::create($validatedInput);
+        $this->questionRepo->createQuestion($validatedInput);
 
         return redirect(route('question.index'))->with('message','Save successful');
     }
