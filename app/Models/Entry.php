@@ -54,7 +54,7 @@ class Entry extends Model
 
     /**
      * Performs validation and returns the array of answers if validation is successful
-     * TODO: This should be in the controller
+     * TODO: This should be in the controller. Remove this after update() is refactored
      *
      * @param Request $request
      * @param Collection $requiredQuestions
@@ -71,42 +71,6 @@ class Entry extends Model
 
         return $request->validate($validationRules);
     }
-
-
-
-    /**
-     * Creates a new journal entry and saves the answers
-     *
-     * @param  Answer $answerModel
-     * @param  array $answers_array
-     * @return bool
-     */
-    public function saveAnswers(Answer $answerModel, array $answers_array): bool
-    {
-        if (!isset($answers_array) || sizeof($answers_array) == 0)
-        {
-            return false;
-        }
-
-        // create an entry record
-        $this->save();
-
-        // save answers for the entry
-        foreach($answers_array as $questionId => $answerText)
-        {
-            if (strlen($answerText) > 0)
-            {
-                $answerModel->create([
-                    'entry_id' => $this->id,
-                    'question_id' => $questionId,
-                    'answer_text' => $answerText,
-                ]);
-            }
-        }
-
-        return true;
-    }
-
 
 
     /**

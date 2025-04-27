@@ -121,60 +121,6 @@ class EntryTest extends ModelTestCase
         $model->performRequestValidation($mockRequest, $requiredQuestions);
     }
 
-    public function testSaveAnswersWithoutAnswers()
-    {
-        /** @var Entry $model */
-        $model = $this->createPartialMockModel(Entry::class, []);
-
-        $result = $model->saveAnswers(new Answer(), []);
-
-        $this->assertFalse($result);
-    }
-
-    public function testSaveAnswersWithAnswers()
-    {
-        $testAnswers = [
-            'answer_1' => 'aaa',
-            'answer_2' => 'bbb',
-            'answer_5' => 'eee',
-        ];
-
-        /** @var Entry $entryModel */
-        $entryModel = $this->createPartialMockModel(Entry::class, [
-            'save' => true,
-        ]);
-
-        /** @var Answer|MockInterface $answerModel */
-        $answerModel = $this->createPartialMockModel(Answer::class, []);
-        $answerModel->allows('create')->times(sizeof($testAnswers))->andReturn(true);
-
-        $result = $entryModel->saveAnswers($answerModel, $testAnswers);
-
-        $this->assertTrue($result);
-    }
-
-    public function testSaveAnswersWithABlankAnswer()
-    {
-        $testAnswers = [
-            'answer_1' => 'aaa',
-            'answer_2' => 'bbb',
-            'answer_5' => '',
-        ];
-
-        /** @var Entry $entryModel */
-        $entryModel = $this->createPartialMockModel(Entry::class, [
-            'save' => true,
-        ]);
-
-        /** @var Answer|MockInterface  $answerModel */
-        $answerModel = $this->createPartialMockModel(Answer::class, []);
-        $answerModel->allows('create')->times(sizeof($testAnswers) - 1)->andReturn(true);
-
-        $result = $entryModel->saveAnswers($answerModel, $testAnswers);
-
-        $this->assertTrue($result);
-    }
-
     public function testUpdateAnswersWithoutAnswers()
     {
         /** @var Entry $model */
