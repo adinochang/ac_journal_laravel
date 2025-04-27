@@ -16,7 +16,6 @@ class Question extends Model
     ];
 
 
-
     /**
      * Returns a list of answers to this question
      *
@@ -26,32 +25,6 @@ class Question extends Model
     {
         return $this->hasMany(Answer::class);
     }
-
-
-
-    /**
-     * Returns a list of active questions
-     *
-     * @return Collection
-     */
-    public function enabledQuestions(): Collection
-    {
-        return $this->where('enabled', 1)->OrderBy('id')->get();
-    }
-
-
-
-    /**
-     * Returns a list of questions that must be answered
-     *
-     * @return Collection
-     */
-    public function requiredQuestions(): Collection
-    {
-        return $this->where('enabled', 1)->where('required', 1)->OrderBy('id')->get();
-    }
-
-
 
     /**
      * Get the table associated with the model.

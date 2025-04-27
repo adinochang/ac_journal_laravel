@@ -31,6 +31,22 @@ class QuestionRepository
     }
 
     /**
+     * @return mixed
+     */
+    public function getEnabledQuestions()
+    {
+        return $this->questionModel->where('enabled', 1)->OrderBy('id')->get();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRequiredQuestions()
+    {
+        return $this->questionModel->where('enabled', 1)->where('required', 1)->OrderBy('id')->get();
+    }
+
+    /**
      * @param array $validatedInput
      * @return mixed
      */
