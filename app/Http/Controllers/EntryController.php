@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Entry;
 use App\Models\Question;
 use App\Models\Answer;
+use App\Repositories\EntryRepository;
+use App\Repositories\QuestionRepository;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -19,6 +21,20 @@ use Illuminate\View\View;
 
 class EntryController extends Controller
 {
+    protected $entryRepo;
+    protected $questionRepo;
+
+
+    /**
+     * @param EntryRepository $entryRepo
+     * @param QuestionRepository $questionRepo
+     */
+    public function __construct(EntryRepository $entryRepo, QuestionRepository $questionRepo)
+    {
+        $this->entryRepo = $entryRepo;
+        $this->questionRepo = $questionRepo;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -26,15 +42,8 @@ class EntryController extends Controller
      */
     public function index()
     {
-        if(isset(request()->filter_date))
-        {
-            $entries = Entry::whereBetween('updated_at', [request()->filter_date,  request()->filter_date . ' 23:59:59'])
-                ->orderByDesc('id')->paginate(5);
-        }
-        else
-        {
-            $entries = Entry::orderByDesc('id')->paginate(5);
-        }
+        $filter = request()->filter_date ?? null;
+        $entries = $this->entryRepo->getFilteredEntries($filter);
 
         return view('entries.index', [
             'entries' => $entries
@@ -49,7 +58,7 @@ class EntryController extends Controller
      */
     public function blog()
     {
-        $entries = Entry::orderByDesc('id')->paginate(2);
+        $entries = $this->entryRepo->getBlogEntries();
 
         return view('home', [
             'entries' => $entries
@@ -64,11 +73,8 @@ class EntryController extends Controller
      */
     public function create()
     {
-        // retrieve the list of questions
-        $question = new Question();
-
         return view('entries.create', [
-            'questions' => $question->enabledQuestions()
+            'questions' => $this->questionRepo->getEnabledQuestions()
         ]);
     }
 
@@ -81,23 +87,20 @@ class EntryController extends Controller
     public function store()
     {
         // validation
-        // TODO: Change to use DI
-        $questionModel = new Question();
+        $validationRules = [];
+        foreach($this->questionRepo->getRequiredQuestions() as $requiredQuestion)
+        {
+            $validationRules['answer_' . $requiredQuestion->id] = 'required';
+        }
+        request()->validate($validationRules);
 
-        $entry = new Entry();
-        $entry->performRequestValidation(request(), $questionModel->requiredQuestions());
-
-        // save new entry with answers
-        $answer = new Answer();
-        $answers = $answer->getAnswersArrayFromRequest(request());
-
-        if (!$entry->saveAnswers($answer, $answers))
+        if (!$this->entryRepo->saveAnswers(request()))
         {
             abort('500');
         }
 
         // redirect to previous URL
-        $previousUrl = request('previous_url');
+        $previousUrl = parse_url(request('previous_url'), PHP_URL_PATH);
 
         return redirect($previousUrl ?? route('entry.index'))->with('message','Save successful');
     }
@@ -141,7 +144,7 @@ class EntryController extends Controller
         $questionModel = new Question();
 
         // validation
-        $entry->performRequestValidation(request(), $questionModel->requiredQuestions());
+        $entry->performRequestValidation(request(), $this->questionRepo->getRequiredQuestions());
 
         // get an array of answers from $request
         $answer = new Answer();
