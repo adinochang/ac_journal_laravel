@@ -10,11 +10,11 @@ class QuestionRepository
 
 
     /**
-     * @param Question $questionModel
+     * @param Question|null $questionModel
      */
-    public function __construct(Question $questionModel)
+    public function __construct(Question $questionModel = null)
     {
-        $this->questionModel = $questionModel;
+        $this->questionModel = $questionModel !== null ? $questionModel : new Question();
     }
 
     /**
