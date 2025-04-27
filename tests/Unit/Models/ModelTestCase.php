@@ -3,7 +3,6 @@
 namespace Tests\Unit\Models;
 
 use Tests\TestCase;
-use Tests\CreatesApplication;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Mockery;
@@ -13,13 +12,6 @@ use Mockery\MockInterface;
 
 class ModelTestCase extends TestCase
 {
-    use CreatesApplication;
-
-    protected const TEST_DATA = [
-        ['id' => 1, 'name' => 'AAA'],
-        ['id' => 2, 'name' => 'BBB'],
-    ];
-
     protected function createPartialMockModel(string $className, array $mockMethods = []): MockInterface
     {
         $mockModel = Mockery::mock($className)->makePartial();

@@ -4,13 +4,10 @@ namespace Tests\Unit\Http\Controllers;
 
 use Mockery;
 use Tests\TestCase;
-use Tests\CreatesApplication;
 
 
 class ControllerTestCase extends TestCase
 {
-    use CreatesApplication;
-
     const VIEW_RENDERED_MESSAGE = 'viewRendered';
     const REDIRECTED_MESSAGE = 'redirected';
 
