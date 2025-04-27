@@ -90,32 +90,4 @@ class AnswerTest extends ModelTestCase
 
         $this->assertEquals($expectedResult, $result);
     }
-
-    public function testFindByEntryAndQuestionsReturnsEmptyCollection()
-    {
-        $mockBuilder = $this->setupMockBuilder();
-
-        /** @var Answer $model */
-        $model = $this->setupMockModel($mockBuilder);
-
-        $result = $model->findByEntryAndQuestion(self::TEST_ENTRY_ID, self::TEST_QUESTION_ID);
-
-        $this->assertEmpty($result);
-    }
-
-    public function testFindByEntryAndQuestionsReturnsExpectedData()
-    {
-        $testAnswer = new Answer();
-        $testAnswer->entry_id = self::TEST_ENTRY_ID;
-        $testAnswer->question_id = self::TEST_QUESTION_ID;
-
-        $mockBuilder = $this->setupMockBuilder([$testAnswer]);
-
-        /** @var Answer $model */
-        $model = $this->setupMockModel($mockBuilder);
-
-        $result = $model->findByEntryAndQuestion(self::TEST_ENTRY_ID, self::TEST_QUESTION_ID);
-
-        $this->assertEquals($testAnswer, $result);
-    }
 }

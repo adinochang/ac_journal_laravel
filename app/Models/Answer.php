@@ -16,7 +16,6 @@ class Answer extends Model
     ];
 
 
-
     /**
      * Returns the entry that contains this answer
      *
@@ -28,7 +27,6 @@ class Answer extends Model
     }
 
 
-
     /**
      * Returns the question that this answer relates to
      *
@@ -38,7 +36,6 @@ class Answer extends Model
     {
         return $this->belongsTo(Question::class);
     }
-
 
 
     /**
@@ -65,30 +62,6 @@ class Answer extends Model
 
         return $answers;
     }
-
-
-
-    /**
-     * Finds an answer filtered by entry_id and question_id
-     *
-     * @param int $entry_id
-     * @param int $question_id
-     *
-     * @return ?Answer
-     */
-    public function findByEntryAndQuestion(int $entry_id, int $question_id): ?Answer
-    {
-        $answers = $this->where('entry_id', $entry_id)->where('question_id', $question_id)->get();
-        $answer = null;
-
-        if (sizeof($answers) > 0)
-        {
-            $answer = $answers[0];
-        }
-
-        return $answer;
-    }
-
 
 
     /**
