@@ -6,7 +6,6 @@ use App\Models\Answer;
 use App\Models\Entry;
 use App\Repositories\EntryRepository;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Mockery;
@@ -177,4 +176,77 @@ class EntryRepositoryTest extends RepositoryTestCase
         $this->assertTrue($result);
     }
 
+    public function testGetAnswersFromEmptyRequest()
+    {
+        /** @var Request $mockRequest */
+        $mockRequest = Mockery::mock(Request::class)->makePartial();
+        $mockRequest->allows('all')->andReturn([]);
+
+        /** @var Entry $mockEntry */
+        $mockEntry = Mockery::mock(Entry::class)->makePartial();
+
+        /** @var Answer $mockAnswer */
+        $mockAnswer = Mockery::mock(Answer::class)->makePartial();
+
+        $repository = new EntryRepository($mockEntry, $mockAnswer);
+
+        $result = $repository->getAnswersArrayFromRequest($mockRequest);
+
+        $this->assertEquals([], $result);
+    }
+
+    public function testGetAnswersFromInvalidRequest()
+    {
+        $testAnswers = [
+            'x_1' => 'aaa',
+            'x_2' => 'bbb',
+        ];
+
+        /** @var Request $mockRequest */
+        $mockRequest = Mockery::mock(Request::class)->makePartial();
+        $mockRequest->allows('all')->andReturn($testAnswers);
+
+        /** @var Entry $mockEntry */
+        $mockEntry = Mockery::mock(Entry::class)->makePartial();
+
+        /** @var Answer $mockAnswer */
+        $mockAnswer = Mockery::mock(Answer::class)->makePartial();
+
+        $repository = new EntryRepository($mockEntry, $mockAnswer);
+
+        $result = $repository->getAnswersArrayFromRequest($mockRequest);
+
+        $this->assertEquals([], $result);
+    }
+
+    public function testGetAnswersFromValidRequest()
+    {
+        $testAnswers = [
+            'answer_1' => 'aaa',
+            'answer_2' => 'bbb',
+            'answer_5' => 'eee',
+        ];
+
+        $expectedResult = [
+            '1' => $testAnswers['answer_1'],
+            '2' => $testAnswers['answer_2'],
+            '5' => $testAnswers['answer_5'],
+        ];
+
+        /** @var Request $mockRequest */
+        $mockRequest = Mockery::mock(Request::class)->makePartial();
+        $mockRequest->allows('all')->andReturn($testAnswers);
+
+        /** @var Entry $mockEntry */
+        $mockEntry = Mockery::mock(Entry::class)->makePartial();
+
+        /** @var Answer $mockAnswer */
+        $mockAnswer = Mockery::mock(Answer::class)->makePartial();
+
+        $repository = new EntryRepository($mockEntry, $mockAnswer);
+
+        $result = $repository->getAnswersArrayFromRequest($mockRequest);
+
+        $this->assertEquals($expectedResult, $result);
+    }
 }

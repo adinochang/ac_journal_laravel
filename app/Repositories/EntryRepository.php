@@ -23,8 +23,7 @@ class EntryRepository
     }
 
     /**
-     * @param $filterDateFrom
-     * @param $filterDateTo
+     * @param $filterDate
      * @return mixed
      */
     public function getFilteredEntries($filterDate = null)
@@ -52,7 +51,7 @@ class EntryRepository
      */
     public function saveAnswers(Request $request): bool
     {
-        $answersArray = $this->answerModel->getAnswersArrayFromRequest($request);
+        $answersArray = $this->getAnswersArrayFromRequest($request);
 
         if (!isset($answersArray) || sizeof($answersArray) == 0)
         {
@@ -76,5 +75,30 @@ class EntryRepository
         }
 
         return true;
+    }
+
+    /**
+     * Find all the answers from $request and format them into an array with the format of:
+     * [ <question_id> => <answer_text> ]
+     *
+     * This array can then be fed into the save function in the Entry model
+     *
+     * @param Request $request
+     * @return array
+     */
+    public function getAnswersArrayFromRequest(Request $request): array
+    {
+        $answers = [];
+
+        foreach ($request->all() as $fieldName => $value)
+        {
+            if (strpos($fieldName, 'answer_') !== false)
+            {
+                // format the answers in the format of [ question_id => answer text ]
+                $answers[str_replace('answer_', '', $fieldName)] = $value;
+            }
+        }
+
+        return $answers;
     }
 }
